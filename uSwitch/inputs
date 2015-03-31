@@ -1,0 +1,5 @@
+price 1000
+price 2000
+usage edf fixed 350
+usage ovo standard 1000
+exit

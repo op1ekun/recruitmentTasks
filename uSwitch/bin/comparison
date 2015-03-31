@@ -1,0 +1,166 @@
+#!/usr/bin/env node
+var plans = require(process.argv[2]),
+
+    // map supported commands to handlers
+    supportedCommands = {
+        'price': calculatePrices,
+        'usage': calculateUsage,
+        'exit': process.exit    
+    },
+
+    // VAT rate represented as a fraction
+    VAT_RATE = 0.05;
+
+/**
+ * Round numbers represented in exponential notation
+ * to avoid rounding problems
+ * 
+ * @param  {float} value        a float value to be rounded to a given decimal points
+ * @param  {integer} decimals   number of decimal points
+ * @return {float}              rounded value
+ */
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+/**
+ * Calculate price for a given usage and data in plans.json
+ * 
+ * @param  {float} usage    the given usage
+ * @return {array}          an array of supplier objects
+ */
+function calculatePrices(usage) {
+    var processedPlans = [];
+
+    plans.forEach(function (plan) {
+        // supplierName,planType,
+        var text = plan.supplier + ',' + plan.plan + ',',
+            price = 0,
+            // create a copy to not alter the original input
+            auxUsage = usage;
+
+        plan.rates.forEach(function (rate) {
+
+            if (rate.threshold) {
+                price += rate.price * rate.threshold;
+                auxUsage -= rate.threshold;
+            }
+            else {
+                price += rate.price * auxUsage;
+            }
+        });
+
+        if (plan.standing_charge) {
+            price += plan.standing_charge * 365;
+        }       
+
+        // add VAT
+        price += price * VAT_RATE;
+
+        // convert to pounds
+        price = round(price/100, 2);
+
+        processedPlans.push({
+            'price': price,
+            'text': text += price
+        });
+    });
+
+    // return processed plans sorted by price - ascending
+    return processedPlans.sort(function (plan1, plan2) {
+        return plan1.price > plan2.price ? 1 : 
+            (plan1.price < plan2.price ? -1 : 0);
+    });
+}
+
+/**
+ * Calculate usage for a given supplier, plan, and total cost
+ * 
+ * @param  {string} supplierName    name/code of the supplier
+ * @param  {string} planName        type of the plan
+ * @param  {float} cost             total cost
+ * @return {float}                  calculated usage
+ */
+function calculateUsage(supplierName, planName, cost) {
+    var usage = 0,
+        cost = (cost/(1+VAT_RATE)) * 12,
+        selectedPlan;
+
+    // find the plan for selected supplier
+    plans.some(function (plan) {
+
+        if (plan.supplier === supplierName && plan.plan === planName) {
+            selectedPlan = plan;
+            // selected plan found, stop processing
+            return true;
+        }    
+    });
+
+    selectedPlan.rates.some(function (rate) {
+        var rateInPounds = rate.price/100,
+            capacity;
+
+        if (rate.threshold) {
+            // calculate how much mmoney can be spend for this rate
+            capacity = rateInPounds * rate.threshold;
+
+            // usage will not go beyond currently processed rate
+            if (cost < capacity) {
+                usage += cost/rateInPounds;
+                // finish the processing
+                return true;
+            }
+            else {
+                usage += rate.threshold;
+                cost -= capacity;
+            }
+        }
+        else {
+            usage += cost/rateInPounds;
+        }
+    });
+
+    return parseInt(usage, 10);
+}
+
+/**
+ * Parse input line by line and execute given commands
+ * 
+ * @param  {stream} chunk   input stream
+ * @return {array}          array of results as strings
+ */
+function processInput(chunk) {
+        // convert the stream to a string
+    var buffer = '' + chunk,
+        // cater for Unix/Linux, MAC, and Windows
+        inputLines = buffer.split(/\r\n?|\n/);
+
+    inputLines.forEach(function (line, index) {
+
+        // skip empty lines 
+        if (line) {
+            var commandAndParams = line.split(/\s+?/),
+                command = commandAndParams.shift(),
+                commandHandler = supportedCommands[command];
+                result = commandHandler.apply(commandHandler, commandAndParams);
+
+                if (Array.isArray(result)) {
+                    result.forEach(function (supplier) {
+                        process.stdout.write(supplier.text + '\n');        
+                    });
+                }
+                else if (result) {
+                    process.stdout.write(result.toString() + '\n');        
+                }
+        }
+    });
+}
+
+// process input
+process.stdin.on('readable', function () {
+    var chunk = process.stdin.read();
+
+    if (chunk != null) {
+        processInput(chunk);
+    }
+});
