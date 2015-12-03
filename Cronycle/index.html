@@ -1,0 +1,118 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Cronycle css test</title>
+
+        <style>
+            .wrapper {
+                position: relative;
+                height: 100%;
+            }
+
+            .buttonWrapper {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+            }
+
+            .circle {
+                position: absolute;
+                top: -1em;
+                left: -1em;
+
+                width: 2em;
+                height: 2em;
+                background-color: red;
+                border: 0;
+                display: block;
+
+                -webkit-border-radius: 1em; 
+                   -moz-border-radius: 1em; 
+                     -o-border-radius: 1em;
+                        border-radius: 1em;
+
+                -webkit-transition: all 0.4s ease;
+                   -moz-transition: all 0.4s ease;
+                     -o-transition: all 0.4s ease;
+                        transition: all 0.4s ease;
+            }
+
+            .circle:hover {
+                top: -2em;
+                left: -2em;
+
+                width: 4em;
+                height: 4em;
+                background-color: black;
+
+                -webkit-box-shadow: 0 0 0.3em 0.2em rgba(0, 0, 0, 0.5);
+                   -moz-box-shadow: 0 0 0.3em 0.2em rgba(0, 0, 0, 0.5);
+                     -o-box-shadow: 0 0 0.3em 0.2em rgba(0, 0, 0, 0.5);
+                        box-shadow: 0 0 0.3em 0.2em rgba(0, 0, 0, 0.5);
+
+                -webkit-border-radius: 2em; 
+                   -moz-border-radius: 2em; 
+                     -o-border-radius: 2em;
+                        border-radius: 2em;
+
+                -webkit-transition: all 0.4s ease;
+                   -moz-transition: all 0.4s ease;
+                     -o-transition: all 0.4s ease;
+                        transition: all 0.4s ease;
+            }
+
+            .arrow {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+
+                display: block;
+            }
+
+            .arrow:after {
+                position: absolute;
+                top: -0.8em;
+                left: -0.3em;
+                display: block;
+                content: '';
+                
+                border-style: solid;
+                border-width: 0.8em 0 0.8em 0.8em;
+                border-color: transparent transparent transparent yellow;
+
+                -webkit-transition: all 0.4s ease;
+                   -moz-transition: all 0.4s ease;
+                     -o-transition: all 0.4s ease;
+                        transition: all 0.4s ease;
+
+                transform: rotate(0deg);
+            }
+
+            .circle:hover .arrow:after {
+                top: -1.4em;
+                left: -0.8em;
+
+                border-color: transparent transparent transparent white;
+                border-width: 1.4em 0 1.4em 1.4em;
+
+                -webkit-transition: all 0.4s ease;
+                   -moz-transition: all 0.4s ease;
+                     -o-transition: all 0.4s ease;
+                        transition: all 0.4s ease;
+
+                transform: rotate(-180deg);
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="buttonWrapper">
+                <button class="circle">
+                    <span class="arrow"></span>
+                </button>
+            </div>
+        </div>
+    </body>
+</html>
