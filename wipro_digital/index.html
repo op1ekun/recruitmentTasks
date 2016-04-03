@@ -1,9 +1,33 @@
-<html>
+<!--
+App states:
+loading
+ready
+error
+-->
+<html class="loading">
 	<head>
 		<title>wipro digital test exercise - 5 day / 3 hour forecast SPA</title>
 	</head>
 
 	<body>
+		<div class="forecast loading">
+			<div class="overlay"></div>
+
+			<h1 class="city"></h1>
+			<section class="rain">
+				<h2>Rain</h2>
+				<span></span>
+			</section>
+			<section class="temp">
+				<h2>Temperature</h2>
+				<span></span>
+			</section>
+			<section class="pres">
+				<h2>Pressure</h2>
+				<span></span>
+			</section>
+		</div>
+
 		<script src="app/app.js"></script>
 	</body>
 </html>

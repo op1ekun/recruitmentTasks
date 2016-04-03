@@ -8,6 +8,6 @@
     "undef": true,
     "unused": true,
     "eqnull": true,
-    "validthis": true
+    "validthis": true,
 	"esversion": 6
 }
