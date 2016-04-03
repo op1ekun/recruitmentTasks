@@ -1,0 +1,13 @@
+{
+    "browser": true,
+    "node": true,
+
+    "eqeqeq": true,
+    "latedef": true,
+    "strict": true,
+    "undef": true,
+    "unused": true,
+    "eqnull": true,
+    "validthis": true
+	"esversion": 6
+}
