@@ -1,0 +1,25 @@
+{
+  "name": "wipro_digital_test_exercise",
+  "version": "0.0.1",
+  "description": "a test exercise for wipro digital as a part of recruitment process",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/op1ekun/recruitmentTasks.git"
+  },
+  "keywords": [
+    "wipro",
+    "test",
+    "exercise",
+    "recruitment"
+  ],
+  "author": "op1ekun@borntoco.de",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/op1ekun/recruitmentTasks/issues"
+  },
+  "homepage": "https://github.com/op1ekun/recruitmentTasks#readme"
+}
