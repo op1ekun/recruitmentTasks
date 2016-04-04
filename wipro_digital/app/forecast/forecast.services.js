@@ -1,4 +1,5 @@
-import config from  '../../config.js';
+import config from '../config.js';
+import {IMPERIAL, METRIC} from '../constants.js';
 
 /**
  * [queryURLTmpl description]
@@ -10,9 +11,7 @@ import config from  '../../config.js';
 function queryURLTmpl(city, country, units) {
     'use strict';
 
-    const apiKey = config.apiKey;
-
-    return `http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&mode=json&appid=${apiKey}&units=${units}`;
+    return `http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&mode=json&appid=${config.apiKey}&units=${units}`;
 }
 
 /**
@@ -22,7 +21,7 @@ function queryURLTmpl(city, country, units) {
  * @param  {String} units   [description]
  * @return {[type]}         [description]
  */
-export function getForecast(city = 'London', country = 'UK', units = 'imperial') {
+export function getForecast(city = 'London', country = 'UK', units = METRIC) {
     'use strict';
 
     const queryURL = queryURLTmpl(city, country, units);
