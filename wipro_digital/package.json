@@ -1,10 +1,11 @@
 {
   "name": "wipro_digital_test_exercise",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a test exercise for wipro digital as a part of recruitment process",
   "main": "index.html",
   "scripts": {
     "build": "webpack && cp index.html dist/",
+    "watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "npm run-script build"
   },

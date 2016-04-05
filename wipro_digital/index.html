@@ -5,29 +5,36 @@ ready
 error
 -->
 <html class="loading">
-	<head>
-		<title>wipro digital test exercise - 5 day / 3 hour forecast SPA</title>
-	</head>
+    <head>
+        <title>wipro digital test exercise - 5 day / 3 hour forecast SPA</title>
+    </head>
 
-	<body>
-		<div class="forecast loading">
-			<div class="overlay"></div>
+    <body>
+        <div class="searchBox">
+            <input type="text" class="searchText">
+            <button class="search">Search</button>
+        </div>
 
-			<h1 class="city"></h1>
-			<section class="rain">
-				<h2>Rain</h2>
-				<span></span>
-			</section>
-			<section class="temp">
-				<h2>Temperature</h2>
-				<span></span>
-			</section>
-			<section class="pres">
-				<h2>Pressure</h2>
-				<span></span>
-			</section>
-		</div>
+        <main>
+            <div class="forecast loading">
+                <div class="overlay"></div>
 
-		<script src="app/app.js"></script>
-	</body>
+                <h1 class="city"></h1>
+                <section class="rain">
+                    <h2>Rain</h2>
+                    <span></span>
+                </section>
+                <section class="temp">
+                    <h2>Temperature</h2>
+                    <span></span>
+                </section>
+                <section class="pres">
+                    <h2>Pressure</h2>
+                    <span></span>
+                </section>
+            </div>
+        </main>
+
+        <script src="app/app.js"></script>
+    </body>
 </html>
