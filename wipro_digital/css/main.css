@@ -1,7 +1,130 @@
+html, body, div, section, 
+h1, h2, h3, p, input, button, radio {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+button:active {
+    background-color: #999;
+}
+
+/* 1080p layout as reference */
 html {
-	background-color: #999;
+    padding-top: 2em;
+    background-color: #2A7CD4;
+    height: 100%;
+    font-size: 100%; /* ~16px */
+}
+
+#searchBox, .forecast {
+    margin: 0 auto 1em auto;
+    padding: 1em;
+    width: 20em; /* ~368px */
 }
 
 #searchBox {
-	background-color: #777;
+    background-color: #219ADD;
+    color: #fff;
+}
+
+#searchText {
+    width: 15em;
+    font-size: 1em;
+    display: inline-block;
+}
+
+#search {
+    width: 4em;
+    font-size: 1em;
+    display: inline-block;
+}
+
+#units {
+    margin-top: 0.5em;
+    font-size: 1em;
+}
+
+.forecast {
+    position: relative;
+    background-color: #219ADD;
+    color: #fff;
+}
+
+.forecast .overlay {
+    display: none;
+}
+
+.forecast.loading .overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+
+    background-color: #666;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+
+}
+
+.forecast.loading .overlay:before {
+    background: url('../assets/spinner.png') 50% 50% no-repeat;
+    animation: spinner 2s linear infinite;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    content: '';
+}  
+
+@keyframes spinner {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+} 
+
+.forecast section {
+    margin: 0.5em;
+}
+
+.forecast .prev,
+.forecast .next {
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+.forecast .time, 
+.forecast .city, 
+.forecast .actions {
+    text-align: center;
+}
+
+.forecast .time {
+    color: #ddd;
+}
+
+.forecast .actions {
+    margin: 0.5em 0;
+}
+
+.forecast h1 {
+    font-size: 2em;
+}
+
+.forecast h2, .forecast h3 {
+    font-size: 1em;
+}
+
+.forecast span {
+    color: #ddd;
+}
+
+/* breakpoints */
+/* 416px */
+@media screen and (max-width: 26em) {
+    html {
+        font-size: 80%;
+    }
 }
