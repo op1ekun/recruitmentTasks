@@ -1,17 +1,22 @@
 var path = require('path');
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
  
 module.exports = {
     entry: './app/app.js',
     output: {
-        path: path.join(__dirname, 'dist/app'),
-        filename: 'app.js'
+        path: path.join(__dirname, 'dist'),
+        filename: 'app/app.js'
     },
     devtool: 'inline-source-map',
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             compress: { warnings: false }
-        })
+        }),
+        new CopyWebpackPlugin([           
+            { from: 'index.html', to: 'index.html' },
+            { from: 'css/main.css', to: 'css/main.css' },
+        ])
     ],
     module: {
         loaders: [
