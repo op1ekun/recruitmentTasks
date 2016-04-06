@@ -1,6 +1,6 @@
 import {getForecast} from './forecast/forecast.services.js';
 import {appEventHandlers} from './app.views.js';
-import {updateForecast, forecastEventHandlers} from './forecast/forecast.views.js';
+import {updateForecast, forecastEventHandlers, controlsEnabled} from './forecast/forecast.views.js';
 
 // holds current forecast data form API
 let currentData;
@@ -59,8 +59,14 @@ forecastEventHandlers.onNext = () => {
 
     if (currentForcastIndex + 1 < currentData.response.list.length) {
         currentForcastIndex++;
-        updateForecastView(currentData);
+        controlsEnabled.next = true;
+        controlsEnabled.prev = true;
     }
+    else {
+        controlsEnabled.next = false;
+    }
+
+    updateForecastView(currentData);
 };
 
 /**
@@ -72,10 +78,16 @@ forecastEventHandlers.onNext = () => {
 forecastEventHandlers.onPrev = () => {
     'use strict';
 
-    if (currentForcastIndex - 1 > 0) {
+    if (currentForcastIndex - 1 >= 0) {
         currentForcastIndex--;
-        updateForecastView(currentData);
+        controlsEnabled.next = true;
+        controlsEnabled.prev = true;
     }
+    else {
+        controlsEnabled.prev = false;
+    }    
+
+    updateForecastView(currentData);
 };
 
 // init
@@ -87,5 +99,7 @@ getForecast()
         currentData = forecastData;
         // reset index
         currentForcastIndex = 0;
+        
+        controlsEnabled.prev = false;
         updateForecastView(currentData);
     });
