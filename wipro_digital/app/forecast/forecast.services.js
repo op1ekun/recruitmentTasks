@@ -19,11 +19,11 @@ function getQueryURL(city, country, units) {
  * Get forecast data from api for given location.
  * 
  * @param  {String} city    the name of a city, defaults to 'London'
- * @param  {String} country the name of a country, defaults to 'UK'
+ * @param  {String} country the name of a country, defaults to ''
  * @param  {String} units   units format, either metric or imperial, defaults to 'metric'
  * @return {Promise}        a Promise that eventually returns a custom object with response, and query parameters 
  */
-export function getForecast(city = 'London', country = 'UK', units = METRIC) {
+export function getForecast(city = 'London', country = '', units = METRIC) {
     'use strict';
 
     const queryURL = getQueryURL(city, country, units);
@@ -45,7 +45,7 @@ export function getForecast(city = 'London', country = 'UK', units = METRIC) {
                             country: country,
                             units: units
                         }
-                    }
+                    };
                 });
         })
         .catch(function(err) {
