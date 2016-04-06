@@ -1,3 +1,7 @@
 html {
-	background-color: red
+	background-color: #999;
+}
+
+#searchBox {
+	background-color: #777;
 }

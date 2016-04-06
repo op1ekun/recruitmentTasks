@@ -1,19 +1,21 @@
-<!--
-App states:
-loading
-ready
-error
--->
-<html class="loading">
+<html>
     <head>
         <title>wipro digital test exercise - 5 day / 3 hour forecast SPA</title>
         <link rel="stylesheet" href="css/main.css" />
     </head>
 
     <body>
-        <div class="searchBox">
-            <input type="text" class="searchText">
-            <button class="search">Search</button>
+        <div id="searchBox">
+            <p>
+                <input type="text" id="searchText">
+                <button id="search">Search</button>
+            </p>
+            <p id="units">
+                <label for="metric">&deg;C</label>
+                <input type="radio" name="units" id="metric" value="metric" checked>
+                <label for="imperial">&deg;F</label>
+                <input type="radio" name="units" id="imperial" value="imperial">
+            </p>
         </div>
 
         <main>
@@ -38,8 +40,8 @@ error
                     <span></span>
                 </section>
                 <section class="actions">
-                	<button class="prev">&lt;</button>
-                	<button class="next">&gt;</button>
+                    <button class="prev">&lt;</button>
+                    <button class="next">&gt;</button>
                 </section>
             </div>
         </main>
