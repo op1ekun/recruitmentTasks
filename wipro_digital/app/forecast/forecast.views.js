@@ -23,7 +23,7 @@ export let forecastEventHandlers = {
 };
 
 /**
- * Renders valuse into the html using html template strings.
+ * Renders values into the html using html template strings.
  * 
  * @param  {Object} options.response    the response object for a single forecast
  * @param  {Object} options.params      thee query parameters
@@ -70,15 +70,17 @@ function render({response, params}) {
     nextButton.disabled = viewState.next ? false : true;
     prevButton.disabled = viewState.prev ? false : true;
 
-    viewState.loading ? 
-        forecastCnt.className += ' loading' : 
-        forecastCnt.className = forecastCnt.className.replace(/\sloading/, '');
+    forecastCnt.className = viewState.loading ? 
+        `${forecastCnt.className} loading` : 
+        forecastCnt.className.replace(/\sloading/, '');
 }
 
 /**
- * [updateForecast description]
- * @param  {[type]} forecastData [description]
- * @return {[type]}              [description]
+ * An exposed wrapper for a render method.
+ * 
+ * @param  {Object} forecastData    a bespoke object with response data for a single forecast,
+ *                                  and query params
+ * @return {undefined}
  */
 export function updateForecast(forecastData) {
     'use strict';
@@ -86,9 +88,11 @@ export function updateForecast(forecastData) {
 }
 
 /**
- * [getNextData description]
- * @param  {[type]} nextData [description]
- * @return {[type]}          [description]
+ * An exposed wrapper for a render method.
+ *  
+ * @param  {Object} nextData    a bespoke object with response data for a single forecast
+ *                              and query params, it the next forecast in the set
+ * @return {undefined}
  */
 export function getNextData(nextData) {
     'use strict';
@@ -96,15 +100,18 @@ export function getNextData(nextData) {
 }
 
 /**
- * [getPrevData description]
- * @param  {[type]} prevData [description]
- * @return {[type]}          [description]
+ * An exposed wrapper for a render method.
+ *  
+ * @param  {Object} prevData    a bespoke object with response data for a single forecast
+ *                              and query params, it the previous forecast in the set
+ * @return {undefined}
  */
 export function getPrevData(prevData) {
     'use strict';
     render(prevData);
 }
  
+// event listeners for view actions
 nextButton.addEventListener('click', () => {
     'use strict';
 

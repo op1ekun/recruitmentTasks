@@ -47,6 +47,8 @@ appEventHandlers.onSearch = (searchText, units) => {
             currentData = forecastData;
             // reset index
             currentForcastIndex = 0;
+
+            viewState.prev = false;
             viewState.loading = false;
             updateForecastView(currentData);
         });
@@ -104,6 +106,7 @@ getForecast()
         // reset index
         currentForcastIndex = 0;
         
+        // setup the view
         viewState.loading = false;
         viewState.prev = false;
         updateForecastView(currentData);
