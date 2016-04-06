@@ -1,6 +1,6 @@
 {
   "name": "wipro_digital_test_exercise",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "a test exercise for wipro digital as a part of recruitment process",
   "main": "index.html",
   "scripts": {
@@ -32,5 +32,8 @@
     "copy-webpack-plugin": "^1.1.1",
     "mkdirp": "^0.5.1",
     "webpack": "^1.12.14"
+  },
+  "dependencies": {
+    "whatwg-fetch": "^0.11.0"
   }
 }

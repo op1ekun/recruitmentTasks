@@ -16,6 +16,10 @@ module.exports = {
         new CopyWebpackPlugin([           
             { from: 'index.html', to: 'index.html' },
             { from: 'css/main.css', to: 'css/main.css' },
+            { 
+                from: 'node_modules/whatwg-fetch/fetch.js', 
+                to: 'node_modules/whatwg-fetch/fetch.js'
+            }
         ])
     ],
     module: {
