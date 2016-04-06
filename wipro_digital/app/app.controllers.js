@@ -1,6 +1,6 @@
 import {getForecast} from './forecast/forecast.services.js';
 import {appEventHandlers} from './app.views.js';
-import {updateForecast, forecastEventHandlers, controlsEnabled} from './forecast/forecast.views.js';
+import {updateForecast, forecastEventHandlers, viewState} from './forecast/forecast.views.js';
 
 // holds current forecast data form API
 let currentData;
@@ -36,6 +36,9 @@ function updateForecastView({params, response}) {
 appEventHandlers.onSearch = (searchText, units) => {
     'use strict';
 
+    viewState.loading = true;
+    updateForecastView(currentData);
+
     let [city, country] = searchText.split(',');
 
     getForecast(city, country, units)
@@ -44,6 +47,7 @@ appEventHandlers.onSearch = (searchText, units) => {
             currentData = forecastData;
             // reset index
             currentForcastIndex = 0;
+            viewState.loading = false;
             updateForecastView(currentData);
         });
 };
@@ -59,11 +63,11 @@ forecastEventHandlers.onNext = () => {
 
     if (currentForcastIndex + 1 < currentData.response.list.length) {
         currentForcastIndex++;
-        controlsEnabled.next = true;
-        controlsEnabled.prev = true;
+        viewState.next = true;
+        viewState.prev = true;
     }
     else {
-        controlsEnabled.next = false;
+        viewState.next = false;
     }
 
     updateForecastView(currentData);
@@ -80,11 +84,11 @@ forecastEventHandlers.onPrev = () => {
 
     if (currentForcastIndex - 1 >= 0) {
         currentForcastIndex--;
-        controlsEnabled.next = true;
-        controlsEnabled.prev = true;
+        viewState.next = true;
+        viewState.prev = true;
     }
     else {
-        controlsEnabled.prev = false;
+        viewState.prev = false;
     }    
 
     updateForecastView(currentData);
@@ -100,6 +104,7 @@ getForecast()
         // reset index
         currentForcastIndex = 0;
         
-        controlsEnabled.prev = false;
+        viewState.loading = false;
+        viewState.prev = false;
         updateForecastView(currentData);
     });

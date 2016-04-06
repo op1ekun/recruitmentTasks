@@ -1,6 +1,7 @@
 import {IMPERIAL} from '../constants.js';
 
-const cityCnt = document.querySelector('.city');
+const forecastCnt = document.querySelector('.forecast');
+const cityCnt = document.querySelector('.forecast .city');
 const rainCnt = document.querySelector('.rain > span');
 const tempCnt = document.querySelector('.temp > span');
 const presCnt = document.querySelector('.pres > span');
@@ -10,9 +11,10 @@ const timeCnt = document.querySelector('.time > h3');
 const nextButton = document.querySelector('.actions > .next');
 const prevButton = document.querySelector('.actions > .prev');
 
-export let controlsEnabled = {
+export let viewState = {
     next: true,
-    prev: true
+    prev: true,
+    loading: true
 };
 
 export let forecastEventHandlers = {
@@ -65,8 +67,12 @@ function render({response, params}) {
 
     // not optimized
     // actions as above
-    nextButton.disabled = controlsEnabled.next ? false : true;
-    prevButton.disabled = controlsEnabled.prev ? false : true;
+    nextButton.disabled = viewState.next ? false : true;
+    prevButton.disabled = viewState.prev ? false : true;
+
+    viewState.loading ? 
+        forecastCnt.className += ' loading' : 
+        forecastCnt.className = forecastCnt.className.replace(/\sloading/, '');
 }
 
 /**
