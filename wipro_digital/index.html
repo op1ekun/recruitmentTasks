@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>wipro digital test exercise - 5 day / 3 hour forecast SPA</title>
+        <link rel="stylesheet" href="css/main.css" />
+    </head>
+
+    <body>
+        <div id="searchBox">
+            <p>
+                <input type="text" id="searchText">
+                <button id="search">Search</button>
+            </p>
+            <p id="units">
+                <label for="metric">&deg;C</label>
+                <input type="radio" name="units" id="metric" value="metric" checked>
+                <label for="imperial">&deg;F</label>
+                <input type="radio" name="units" id="imperial" value="imperial">
+            </p>
+        </div>
+
+        <main>
+            <div class="forecast loading">
+                <div class="overlay"></div>
+
+                <h1 class="city"></h1>
+                <section class="clouds">
+                    <h2>Clouds</h2>
+                    <span></span>
+                </section>
+                <section class="rain">
+                    <h2>Rain</h2>
+                    <span></span>
+                </section>
+                <section class="temp">
+                    <h2>Temperature</h2>
+                    <span></span>
+                </section>
+                <section class="pres">
+                    <h2>Pressure</h2>
+                    <span></span>
+                </section>
+                <section class="actions">
+                    <button class="prev">&lt;</button>
+                    <button class="next">&gt;</button>
+                </section>
+            </div>
+        </main>
+
+        <script src="node_modules/whatwg-fetch/fetch.js"></script>
+        <script src="app/app.js"></script>
+    </body>
+</html>
