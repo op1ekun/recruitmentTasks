@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="Framework.js"></script>
+  </head>
+  <body>
+
+    <div class="content"/>
+
+    <script type="template/framework" id="content-template">
+      <header>
+        <h1>{{title}}</h1>
+        <form>
+          <label for="title">Add your title here</label>
+          <input type="text" id="title" data-event="keyup:titleChanged" value="{{title}}" />
+        </form>
+        <a href="#" data-event="click:clearTitle">clear the title</a>
+      </header>
+    </script>
+
+    <script>
+
+      var fw = Framework.create({
+        template: '#content-template',
+        data: {
+          title: 'Hello World'
+        },
+        clearTitle: function(e) {
+          document.querySelector('input').value = '';
+          document.querySelector('h1').innerHTML = '';
+        },
+        titleChanged: function(e) {
+          document.querySelector('h1').innerHTML = e.target.value;
+        }
+      });
+      fw.render('.content');
+
+    </script>
+  </body>
+</html>
