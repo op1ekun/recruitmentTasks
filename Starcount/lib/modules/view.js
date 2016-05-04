@@ -1,39 +1,39 @@
-import template from './view/template.js';
+import * as template from './view/template.js';
 
 const supportedEvents = [
-    'keyup:clearTitle',
-    'click:titleChanged',
+    'keyup:titleChanged',
+    'click:clearTitle',
 ];
 
 let config;
 
-function render(selector) {
-    // TODO
-    // compile template
-    // render template
-    // bind events
+export function render(selector) {
 
-    // supportedEvents.map((eventName) => {
-    //     if (config[eventName]) {
+    const tmplStr = document.querySelector(config.template).innerHTML;
+    const compiledTmpl = template.compile(tmplStr);
+    const contentElem = document.querySelector(selector);
 
-    //         return {
-    //             eventName: config[eventName],
-    //         };
-    //     }
-    // });
+    return compiledTmpl(config.data)
+        .then((parsedTmpl) => {
+            contentElem.innerHTML = parsedTmpl;
+
+            supportedEvents.forEach((eventName) => {
+                const eventElem = contentElem.querySelector(`${selector} > *[data-event="${eventName}"]`);
+                const [type, handler] = eventName.split(':');
+
+                if (eventElem && config[handler]) {
+                    eventElem.addEventListener(type, config[handler]);
+                }
+            });
+        });
+
 }
 
-function setConfig(newConfig = { data: {}, template: '' }) {
+export function setConfig(newConfig = { data: {}, template: '' }) {
     config = newConfig;
 }
 
-function getConfig() {
+export function getConfig() {
     return config;
 }
-
-export default {
-    render,
-    setConfig,
-    getConfig,
-};
 

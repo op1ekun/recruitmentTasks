@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = (config) => {
+module.exports = function karmaConfig(config) {
 
     config.set({
 
@@ -26,6 +26,7 @@ module.exports = (config) => {
         ],
 
         files: [
+            'node_modules/babel-polyfill/dist/polyfill.js',
             'lib/tests/**/*.spec.js',
         ],
 
