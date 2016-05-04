@@ -1,4 +1,4 @@
-import view from './view.js';
+import * as view from './modules/view.js';
 
 function create(config = {}) {
 
@@ -9,6 +9,6 @@ function create(config = {}) {
     };
 }
 
-export default {
+window.Framework = {
     create,
 };

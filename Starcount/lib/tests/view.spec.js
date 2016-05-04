@@ -111,7 +111,7 @@ describe('view', () => {
 
             view.render('.content')
                 .then(() => {
-                    const eventElem = document.querySelector('.content > *[data-event="click:clearTitle"]');
+                    const eventElem = document.querySelector('.content *[data-event="click:clearTitle"]');
 
                     clickElem(eventElem);
                 });

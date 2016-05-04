@@ -18,7 +18,7 @@ export function render(selector) {
             contentElem.innerHTML = parsedTmpl;
 
             supportedEvents.forEach((eventName) => {
-                const eventElem = contentElem.querySelector(`${selector} > *[data-event="${eventName}"]`);
+                const eventElem = contentElem.querySelector(`${selector} *[data-event="${eventName}"]`);
                 const [type, handler] = eventName.split(':');
 
                 if (eventElem && config[handler]) {

@@ -1,12 +1,15 @@
 {
   "name": "starcount",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a coding ecercise for Starcount",
   "main": "files/index.html",
   "scripts": {
     "lint": "eslint ./lib/**/*.js",
     "test": "karma start ./karma.conf.js",
-    "tdd": "karma start ./karma.conf.js --no-single-run"
+    "tdd": "karma start ./karma.conf.js --no-single-run",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "postinstall": "npm run-script build"
   },
   "keywords": [
     "test",
