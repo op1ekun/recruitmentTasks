@@ -1,0 +1,11 @@
+#source-img, #mosaic-img {
+    max-width: 50%;
+    display: inline-block;
+}
+
+svg {
+    float: left;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
