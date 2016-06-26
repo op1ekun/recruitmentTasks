@@ -1,7 +1,6 @@
 /* global window */
 /* global TILE_WIDTH */
-
-import chai from '../node_modules/chai/chai.js';
+/* global chai */
 import * as svgService from '../src/svgService';
 
 const expect = chai.expect;
@@ -62,8 +61,8 @@ describe('svgService', () => {
 
             svgService.getTile(hexColor)
                 .then(response => response.json())
-                .then((svgTileTemplate) => {
-                    expect(svgTileTemplate).to.be.equal(processedTemplate);
+                .then((svgTile) => {
+                    expect(svgTile).to.be.equal(processedTemplate);
                     done();
                 });
         });

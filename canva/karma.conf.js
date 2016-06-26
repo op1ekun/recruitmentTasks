@@ -22,6 +22,8 @@ module.exports = function karmaConfig(config) {
         ],
 
         files: [
+            'node_modules/chai/chai.js',
+            'node_modules/chai-spies/chai-spies.js',
             'node_modules/babel-polyfill/dist/polyfill.js',
             'js/mosaic.js',
             'tests/**/*.spec.js',
