@@ -1,10 +1,11 @@
 {
   "author": "Canva",
   "name": "mosaic",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "start": "node server.js",
-    "test": "karma start ./karma.conf.js"
+    "test": "karma start ./karma.conf.js",
+    "build": "webpack"
   },
   "devDependencies": {
     "babel": "^6.5.2",

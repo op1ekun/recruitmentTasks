@@ -27,6 +27,10 @@ describe('uploadView', () => {
         expect(uploadView.init().then).to.be.a('function');
     });
 
+    it('implements event emitter .on() method', () => {
+        expect(uploadView.on).to.be.a('function');
+    });
+
     describe('.init()', () => {
 
         it('resolves Promise if inititialization is successful', (done) => {

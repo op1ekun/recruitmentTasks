@@ -23,7 +23,7 @@ function fetchStub(url) {
         if (matched) {
             resolve({
                 ok: true,
-                json: () => new Promise((resolve) => { // eslint-disable-line no-shadow
+                text: () => new Promise((resolve) => { // eslint-disable-line no-shadow
                     resolve(svgTemplate.replace('%s', matched[1]).replace('%d', TILE_WIDTH));
                 }),
             });
@@ -60,7 +60,6 @@ describe('tileService', () => {
             const processedTemplate = svgTemplate.replace('%s', hexColor).replace('%d', TILE_WIDTH);
 
             tileService.getTile(hexColor)
-                .then(response => response.json())
                 .then((svgTile) => {
                     expect(svgTile).to.be.equal(processedTemplate);
                     done();

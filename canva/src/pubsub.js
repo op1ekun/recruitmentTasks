@@ -2,9 +2,9 @@ export default class PubSub {
 
     constructor() {
         // store subsribers
-        let subscribers = {};
+        this.subscribers = {};
         // start unique ids from 1
-        let uniqueId    = 1;
+        this.uniqueId = 1;
     }
 
     /**
@@ -12,48 +12,46 @@ export default class PubSub {
      * @param  {String}   notification  a notification message
      * @param  {Function} callback      subscriber's callback
      * @return {String}   id            an alplahumeric identificator the subscriber
-     *                                  used to unsubscribe               
+     *                                  used to unsubscribe
      */
     subscribe(notification, callback) {
-        if (!subscribers[notification]) {
-            subscribers[notification] = [];
+        if (!this.subscribers[notification]) {
+            this.subscribers[notification] = [];
         }
 
-        var id = uniqueId.toString();
-        uniqueId++;
+        const id = this.uniqueId.toString();
+        this.uniqueId++;
 
-        subscribers[notification].push({
-            id          : id,
-            callback    : callback
+        this.subscribers[notification].push({
+            id,
+            callback,
         });
 
         return id;
     }
- 
+
     /**
      * Publish notification, notify all the subscribers
      * @param  {String} notification    a notification message
      * @return undefined
      */
-    publish(notification) {
-        var _this   = this,
-            list    = subscribers[notification],
-            args    = Array.prototype.slice.call(arguments, 1);
+    publish(notification, ...args) {
+        const list = this.subscribers[notification];
 
         if (!list) {
             return;
         }
 
         // run callback asynchronously
-        setTimeout(function() {
+        setTimeout(() => {
             // loop through the list of subcsribers
-            for (var i = 0, l = list.length; i <l; i++) {
+            for (let i = 0, l = list.length; i < l; i++) {
                 // run the callback with sin
-                list[i].callback.apply(_this, args);
+                list[i].callback(...args);
             }
         }, 0);
-    };
- 
+    }
+
     /**
      * Unsubscribe a single subscriber
      * @param  {String}  id     alphanumeric id of a subscriber
@@ -61,16 +59,16 @@ export default class PubSub {
      *                          false if subscriber wasn't removed
      */
     unsubscribe(id) {
-        for (var notification in subscribers) {
+        for (let notification in this.subscribers) {
 
-            for (var i = 0, l = subscribers[notification].length; i < l; i++) {
-                if (subscribers[notification][i].id === id) {
-                    subscribers[notification].splice(i, 1);
+            for (let i = 0, l = this.subscribers[notification].length; i < l; i++) {
+                if (this.subscribers[notification][i].id === id) {
+                    this.subscribers[notification].splice(i, 1);
                     return true;
                 }
             }
         }
 
         return false;
-    };
+    }
 }

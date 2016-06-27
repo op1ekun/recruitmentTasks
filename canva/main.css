@@ -1,11 +1,17 @@
+html, body, main, section, div, canvas, svg {
+    margin: 0;
+    padding: 0;
+}
+
+#source-img {
+    max-width: 49%;
+}
+
 #source-img, #mosaic-img {
-    max-width: 50%;
     display: inline-block;
 }
 
 svg {
-    float: left;
-    margin: 0;
-    padding: 0;
     border: 0;
+    float: left;
 }

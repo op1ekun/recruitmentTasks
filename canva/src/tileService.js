@@ -17,6 +17,7 @@ export function getTile(hexColor) {
             }
 
             return fetch(`/color/${hexColor}`)
-                .then(handleError);
+                .then(handleError)
+                .then(response => response.text());
         });
 }

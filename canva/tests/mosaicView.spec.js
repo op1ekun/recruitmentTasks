@@ -29,7 +29,13 @@ describe('mosaicView', () => {
 
     it('implements .render() method', () => {
         expect(mosaicView.render).to.be.a('function');
-        expect(mosaicView.render().then).to.be.a('function');
+        expect(mosaicView.render({
+            canvasImgData: {
+                data: [],
+            },
+            calculatedWidth: 0,
+            calculatedHeight: 0,
+        }).then).to.be.a('function');
     });
 
     describe('.init()', () => {

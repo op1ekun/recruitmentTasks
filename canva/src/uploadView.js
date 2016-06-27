@@ -37,7 +37,7 @@ function handleFileUpload() {
 
         const canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
 
-        emitter.emit(supportedEvents.IMAGE_RENDERED, {
+        emitter.publish(supportedEvents.IMAGE_RENDERED, {
             canvasImgData,
             calculatedWidth,
             calculatedHeight,
@@ -71,4 +71,8 @@ export function init() {
             reject(err);
         }
     });
+}
+
+export function on(...args) {
+    emitter.subscribe(...args);
 }

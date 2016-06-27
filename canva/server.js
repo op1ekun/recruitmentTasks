@@ -33,12 +33,23 @@ http.createServer(function (req, res) {
       fs.createReadStream(filename).pipe(res);
       return;
     }
+  } else if (m = pathname.match(/\.css$/)) {
+      var filename = dir + pathname;
+      var stats = fs.existsSync(filename) && fs.statSync(filename);
+
+      if (stats && stats.isFile()) {
+          res.writeHead(200, {'Content-Type': 'text/css'});
+          fs.createReadStream(filename)
+            .pipe(res);
+          return;
+      }
   } else if (m = pathname.match(/^\/color\/([0-9a-fA-F]{6})/)) {
-    res.writeHead(200, {'Content-Type': 'image/svg+xml'});
+    res.writeHead(200, {'Content-Type': 'text/plain'});
     res.write(util.format(svgTemplate, mosaic.TILE_WIDTH, mosaic.TILE_HEIGHT, m[1]));
     res.end();
     return;
   }
+  
   res.writeHead(404, {'Content-Type': 'text/plain'});
   res.write('404 Not Found\n');
   res.end();
