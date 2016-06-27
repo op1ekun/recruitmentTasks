@@ -30,31 +30,28 @@ function avgColor(colorArray) {
     return parseInt(colorSum / colorArray.length, 10);
 }
 
-function drawTile(x, y, tileData) {
+function getTile(x, y, tileData) {
     const redColor = [];
     const greenColor = [];
     const blueColor = [];
 
-    return new Promise((resolve, reject) => {
-        for (let i = 0, l = tileData.length; i < l; i += 4) {
-            redColor.push(tileData[i]);
-            greenColor.push(tileData[i + 1]);
-            blueColor.push(tileData[i + 2]);
-        }
+    // each pixel color is composed of 4 values
+    for (let i = 0, l = tileData.length; i < l; i += 4) {
+        redColor.push(tileData[i]);
+        greenColor.push(tileData[i + 1]);
+        blueColor.push(tileData[i + 2]);
+    }
 
-        const avgHexColor = rgbToHex(avgColor(redColor), avgColor(greenColor), avgColor(blueColor));
+    const avgHexColor = rgbToHex(avgColor(redColor), avgColor(greenColor), avgColor(blueColor));
 
-        tileService.getTile(avgHexColor)
-            .then((tmpl) => {
-                resolve(tmpl);
-            })
-            .catch((err) => {
-                reject('drawing a tile failed', err);
-            });
-    });
+    return tileService.getTile(avgHexColor)
+        .then((tmpl) => tmpl)
+        .catch((err) => {
+            console.error('getTile', err);
+        });
 }
 
-function drawRow(xTilesCount, y, rowData, canvasWidth) {
+function getRow(xTilesCount, y, rowData, canvasWidth) {
     const tileData = [];
     const tilePromises = [];
 
@@ -72,19 +69,18 @@ function drawRow(xTilesCount, y, rowData, canvasWidth) {
             dataEnd = dataStart + (TILE_WIDTH * 4);
         }
 
-        tilePromises.push(drawTile(x, y, tileData[x]));
+        tilePromises.push(getTile(x, y, tileData[x]));
     }
 
     return Promise.all(tilePromises)
-        .then((svgTiles) => {
-            mosaicElem.innerHTML += svgTiles.join('');
-        })
+        .then((svgTiles) => svgTiles.join(''))
         .catch((err) => {
-            console.error('drawing a row failed', err);
+            console.error('getRow', err);
         });
 }
 
 export function render(mosaicData) {
+    // reset before rendering
     mosaicElem.innerHTML = '';
     mosaicElem.style.width = `${mosaicData.calculatedWidth}px`;
     mosaicElem.style.height = `${mosaicData.calculatedHeight}px`;
@@ -104,11 +100,30 @@ export function render(mosaicData) {
 
     // loop thru every row
     for (let y = 0; y < yTilesCount; y++) {
-        rowPromises.push(drawRow(xTilesCount, y, pixelData.slice(dataStart, dataEnd), canvasImgData.width));
+        rowPromises.push(getRow(xTilesCount, y, pixelData.slice(dataStart, dataEnd), canvasImgData.width));
         // "move" range to the next row
         dataStart = dataEnd;
         dataEnd = dataStart + canvasImgData.width * 4 * TILE_WIDTH;
     }
 
-    return Promise.all(rowPromises);
+    return rowPromises
+        // keep rows rendering async, but retain the order
+        .reduce((prevPromise, currPromise) =>
+            prevPromise
+                .then((svgTiles) => { // eslint-disable-line arrow-body-style
+
+                    // optimization to smoothen the rendering of the rows
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            mosaicElem.innerHTML += svgTiles;
+                            resolve();
+                        }, 50);
+                    })
+                    .then(() => currPromise);
+                })
+        )
+        // still need to process the "reduced" one
+        .then((svgTiles) => {
+            mosaicElem.innerHTML += svgTiles;
+        });
 }
