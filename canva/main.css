@@ -7,6 +7,12 @@ html, body, main, section, div, canvas, svg {
     max-width: 49%;
 }
 
+#mosaic-img {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+}
+
 #source-img, #mosaic-img {
     display: inline-block;
 }
