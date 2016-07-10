@@ -1,0 +1,23 @@
+html, body, main, section, div, canvas, svg {
+    margin: 0;
+    padding: 0;
+}
+
+#source-img {
+    max-width: 49%;
+}
+
+#mosaic-img {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+}
+
+#source-img, #mosaic-img {
+    display: inline-block;
+}
+
+svg {
+    border: 0;
+    float: left;
+}
