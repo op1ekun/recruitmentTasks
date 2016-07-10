@@ -5,11 +5,11 @@ import * as tileService from './tileService';
 
 let mosaicElem;
 
-export function init() {
+export function init(mosaiSelector = '#mosaic-img') {
 
     return new Promise((resolve, reject) => {
         try {
-            mosaicElem = document.querySelector('#mosaic-img');
+            mosaicElem = document.querySelector(mosaiSelector);
 
             mosaicElem.style.width = `${DEFAULT_WIDTH}px`;
             mosaicElem.style.height = `${DEFAULT_HEIGHT}px`;
@@ -132,15 +132,16 @@ export function render(mosaicData) {
         dataEnd = dataStart + canvasImgData.width * 4 * TILE_WIDTH;
     }
 
-    // rows will be processed one at time
-    // to not hammer server with tile requests
-    // which caused issue when all rows where processed in paraller
+    // the previous version was (pardon my french) a brainfart,
+    // left after I was testing out different options to render rows
     return rowsData.reduce((promise, rowData, index) =>
-        promise.then((rowTmpl) => {
-            mosaicElem.innerHTML += rowTmpl;
-            return getRow(xTilesCount, index, pixelData.slice(rowData.dataStart, rowData.dataEnd), canvasImgData.width);
-        }), Promise.resolve('')
-    ).then((rowTmpl) => {
-        mosaicElem.innerHTML += rowTmpl;
-    });
+        promise.then(() => getRow(
+                xTilesCount,
+                index,
+                pixelData.slice(rowData.dataStart, rowData.dataEnd),
+                canvasImgData.width)
+            .then((rowTmpl) => {
+                mosaicElem.innerHTML += rowTmpl;
+            })
+    ), Promise.resolve());
 }

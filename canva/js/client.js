@@ -52,7 +52,7 @@
 
 	var uploadView = _interopRequireWildcard(_uploadView);
 
-	var _mosaicView = __webpack_require__(4);
+	var _mosaicView = __webpack_require__(5);
 
 	var mosaicView = _interopRequireWildcard(_mosaicView);
 
@@ -60,6 +60,9 @@
 
 	uploadView.init().then(mosaicView.init).then(function () {
 	    // process uploaded images
+	    // TODO
+	    // drop event emitter,
+	    // and simplify to uploadView.onImageRendered((renderedImageData) => { .. });
 	    uploadView.on(_constants.supportedEvents.IMAGE_RENDERED, function (renderedImageData) {
 
 	        mosaicView.render(renderedImageData).then(function () {
@@ -102,6 +105,12 @@
 
 	var _pubsub2 = _interopRequireDefault(_pubsub);
 
+	var _uploadController = __webpack_require__(4);
+
+	var uploadController = _interopRequireWildcard(_uploadController);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var emitter = new _pubsub2.default();
@@ -138,6 +147,7 @@
 
 	        var canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
 
+	        // TODO simplify onImageRendered
 	        emitter.publish(_constants.supportedEvents.IMAGE_RENDERED, {
 	            canvasImgData: canvasImgData,
 	            calculatedWidth: calculatedWidth,
@@ -153,12 +163,30 @@
 	    fileReader.readAsDataURL(fileToUpload);
 	}
 
+	/**
+	 * Initialized the file upload view.
+	 *
+	 * @param   {String} uploadImgSel   a CSS selector for uploaded image container
+	 * @param   {String} sourceImgSel   a CSS selector for source image container
+	 * @returns {Promise}               a Promise that resolves successfuly when initialization succeeds
+	 */
 	function init() {
+	    var _this = this;
 
+	    var uploadImgSel = arguments.length <= 0 || arguments[0] === undefined ? '#upload-img' : arguments[0];
+	    var sourceImgSel = arguments.length <= 1 || arguments[1] === undefined ? '#source-img' : arguments[1];
+
+
+	    // I have to defend my choice to use Promises for synchronous code,
+	    // this is done for the interface consistency.
+	    //
+	    // In my career I've already have a number of conversation when we discussed this "issue".
+	    // As a developer I would rather have consistency
+	    // than strict separate behaviour for both sync and async.
 	    return new Promise(function (resolve, reject) {
 	        try {
-	            uploadImgInput = document.querySelector('#upload-img');
-	            canvasElem = document.querySelector('#source-img');
+	            uploadImgInput = document.querySelector(uploadImgSel);
+	            canvasElem = document.querySelector(sourceImgSel);
 	            ctx = canvasElem.getContext('2d');
 
 	            ctx.clearRect(0, 0, _constants.DEFAULT_WIDTH, _constants.DEFAULT_HEIGHT);
@@ -166,7 +194,48 @@
 	            canvasElem.width = _constants.DEFAULT_WIDTH;
 	            canvasElem.height = _constants.DEFAULT_HEIGHT;
 
-	            uploadImgInput.addEventListener('change', handleFileUpload);
+	            // uploadImgInput.addEventListener('change', handleFileUpload);
+	            uploadImgInput.addEventListener('change', function () {
+	                var fileList = _this.files;
+
+	                if (!fileList) {
+	                    return;
+	                }
+
+	                var fileToUpload = fileList[0];
+
+	                // controller handles the upload
+	                uploadController.handleFileUpload(fileToUpload)
+	                // render image
+	                .then(function (fileSrc) {
+	                    var uploadedImg = new Image();
+
+	                    function handleImgOnload() {
+	                        // we need caclulated values here to avoid scaling images up
+	                        var calculatedWidth = uploadedImg.width < _constants.DEFAULT_WIDTH ? uploadedImg.width : _constants.DEFAULT_WIDTH;
+	                        var calculatedHeight = uploadedImg.height / (uploadedImg.width > _constants.DEFAULT_WIDTH ? uploadedImg.width / _constants.DEFAULT_WIDTH : 1);
+
+	                        canvasElem.width = calculatedWidth;
+	                        canvasElem.height = calculatedHeight;
+
+	                        ctx.drawImage(uploadedImg, 0, 0, calculatedWidth, calculatedHeight);
+
+	                        var canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
+
+	                        // TODO simplify onImageRendered
+	                        emitter.publish(_constants.supportedEvents.IMAGE_RENDERED, {
+	                            canvasImgData: canvasImgData,
+	                            calculatedWidth: calculatedWidth,
+	                            calculatedHeight: calculatedHeight
+	                        });
+
+	                        uploadedImg.removeEventListener('load', handleFileUpload);
+	                    }
+
+	                    uploadedImg.addEventListener('load', handleImgOnload);
+	                    uploadedImg.src = fileSrc;
+	                });
+	            });
 	            resolve();
 	        } catch (err) {
 	            reject(err);
@@ -291,6 +360,32 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.handleFileUpload = handleFileUpload;
+	function handleFileUpload(fileToUpload) {
+
+	    return new Promise(function (resolve, reject) {
+
+	        var fileReader = new FileReader();
+
+	        fileReader.addEventListener('load', function () {
+	            return resolve(fileReader.result);
+	        });
+	        fileReader.addEventListener('error', function () {
+	            return reject(fileReader.error);
+	        });
+	        fileReader.readAsDataURL(fileToUpload);
+	    });
+	}
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -303,7 +398,7 @@
 
 	var _constants = __webpack_require__(1);
 
-	var _tileService = __webpack_require__(5);
+	var _tileService = __webpack_require__(6);
 
 	var tileService = _interopRequireWildcard(_tileService);
 
@@ -342,13 +437,7 @@
 	    return parseInt(colorSum / colorArray.length, 10);
 	}
 
-	/**
-	 * Gets a html string of a single tile.
-	 *
-	 * @param  {Object} tileData pixel data for the tile
-	 * @return {Promise}         a Promise that resolves with html string of a tile
-	 */
-	function getTile(tileData) {
+	function getTile(x, y, tileData) {
 	    var redColor = [];
 	    var greenColor = [];
 	    var blueColor = [];
@@ -369,16 +458,7 @@
 	    });
 	}
 
-	/**
-	 * Gets a html string for all tiles that a row is composed of.
-	 *
-	 * @param  {Number} xTilesCount how many tile the row has
-	 * @param  {Number} rowIndex    rowIndex
-	 * @param  {Object} rowData     pixel data for the whole row
-	 * @param  {Number} canvasWidth the length of the source canvas image
-	 * @return {Promise}            a Promise that is resolved with html string of row
-	 */
-	function getRow(xTilesCount, rowIndex, rowData, canvasWidth) {
+	function getRow(xTilesCount, y, rowData, canvasWidth) {
 	    var tileData = [];
 	    var tileDataPromises = [];
 
@@ -396,7 +476,7 @@
 	            dataEnd = dataStart + TILE_WIDTH * 4;
 	        }
 
-	        tileDataPromises.push(getTile(tileData[x]));
+	        tileDataPromises.push(getTile(x, y, tileData[x]));
 	    }
 
 	    return Promise.all(tileDataPromises).then(function (svgTiles) {
@@ -407,13 +487,6 @@
 	    });
 	}
 
-	/**
-	 * Renders the mosaic row by row.
-	 *
-	 * @param  {Object} mosaicData a bespoke object containg data
-	 *                             necessary to render the mosaic
-	 * @return {Promise}           resolves with a message when the mosaic is finished
-	 */
 	function render(mosaicData) {
 	    mosaicElem.innerHTML = '';
 	    mosaicElem.style.width = mosaicData.calculatedWidth + 'px';
@@ -429,6 +502,7 @@
 	    var yTilesCount = Math.floor(canvasImgData.height / TILE_HEIGHT);
 	    var rowsData = [];
 
+	    // FIXME along with for loop
 	    var dataStart = 0;
 	    var dataEnd = canvasImgData.width * 4 * TILE_WIDTH;
 
@@ -444,21 +518,19 @@
 	        dataEnd = dataStart + canvasImgData.width * 4 * TILE_WIDTH;
 	    }
 
-	    // rows will be processed one at time
-	    // to not hammer server with tile requests
-	    // which caused issue when all rows where processed in paraller
+	    // the previous version was (pardon my french) a brainfart,
+	    // left after I was testing out different options to render rows
 	    return rowsData.reduce(function (promise, rowData, index) {
-	        return promise.then(function (rowTmpl) {
-	            mosaicElem.innerHTML += rowTmpl;
-	            return getRow(xTilesCount, index, pixelData.slice(rowData.dataStart, rowData.dataEnd), canvasImgData.width);
+	        return promise.then(function () {
+	            return getRow(xTilesCount, index, pixelData.slice(rowData.dataStart, rowData.dataEnd), canvasImgData.width).then(function (rowTmpl) {
+	                mosaicElem.innerHTML += rowTmpl;
+	            });
 	        });
-	    }, Promise.resolve('')).then(function (rowTmpl) {
-	        mosaicElem.innerHTML += rowTmpl;
-	    });
+	    }, Promise.resolve());
 	}
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';

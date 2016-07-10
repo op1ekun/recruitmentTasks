@@ -6,6 +6,9 @@ uploadView.init()
     .then(mosaicView.init)
     .then(() => {
         // process uploaded images
+        // TODO
+        // drop event emitter,
+        // and simplify to uploadView.onImageRendered((renderedImageData) => { .. });
         uploadView.on(supportedEvents.IMAGE_RENDERED, (renderedImageData) => {
 
             mosaicView.render(renderedImageData)
