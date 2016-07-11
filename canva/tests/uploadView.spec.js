@@ -22,11 +22,6 @@ describe('uploadView', () => {
         done();
     });
 
-    it('implements .init() method', () => {
-        expect(uploadView.init).to.be.a('function');
-        expect(uploadView.init().then).to.be.a('function');
-    });
-
     it('implements event emitter .on() method', () => {
         expect(uploadView.on).to.be.a('function');
     });

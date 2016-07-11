@@ -22,22 +22,6 @@ describe('mosaicView', () => {
         done();
     });
 
-    it('implements .init() method', () => {
-        expect(mosaicView.init).to.be.a('function');
-        expect(mosaicView.init().then).to.be.a('function');
-    });
-
-    it('implements .render() method', () => {
-        expect(mosaicView.render).to.be.a('function');
-        expect(mosaicView.render({
-            canvasImgData: {
-                data: [],
-            },
-            calculatedWidth: 0,
-            calculatedHeight: 0,
-        }).then).to.be.a('function');
-    });
-
     describe('.init()', () => {
 
         it('resolves Promise if inititialization is successful', (done) => {
@@ -56,5 +40,9 @@ describe('mosaicView', () => {
                     done();
                 });
         });
+    });
+
+    xdescribe('.render()', () => {
+
     });
 });
