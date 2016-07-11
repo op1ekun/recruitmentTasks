@@ -9,52 +9,53 @@ const emitter = new PubSub();
 let uploadImgInput;
 let canvasElem;
 let ctx;
+let uploadedImg;
 
-// function handleFileUpload() {
-//     const fileList = this.files;
+// TODO change to promises to avoid callback hell?
+// or variables at te top of the scope
+function handleImgOnload() {
+    // we need caclulated values here to avoid scaling images up
+    const calculatedWidth = (uploadedImg.width < DEFAULT_WIDTH ?
+        uploadedImg.width : DEFAULT_WIDTH);
+    const calculatedHeight = (uploadedImg.height / (uploadedImg.width > DEFAULT_WIDTH ?
+        uploadedImg.width / DEFAULT_WIDTH : 1));
 
-//     if (!fileList) {
-//         return;
-//     }
+    canvasElem.width = calculatedWidth;
+    canvasElem.height = calculatedHeight;
 
-//     const fileToUpload = fileList[0];
-//     const fileReader = new FileReader();
-//     const uploadedImg = new Image();
+    ctx.drawImage(uploadedImg, 0, 0, calculatedWidth, calculatedHeight);
 
-//     function handleReaderOnload() {
-//         uploadedImg.src = fileReader.result;
-//         fileReader.removeEventListener('load', handleReaderOnload);
-//     }
+    const canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
 
-//     function handleImgOnload() {
-//         // we need caclulated values here to avoid scaling images up
-//         const calculatedWidth = (uploadedImg.width < DEFAULT_WIDTH ?
-//             uploadedImg.width : DEFAULT_WIDTH);
-//         const calculatedHeight = (uploadedImg.height / (uploadedImg.width > DEFAULT_WIDTH ?
-//             uploadedImg.width / DEFAULT_WIDTH : 1));
+    // TODO simplify onImageRendered
+    emitter.publish(supportedEvents.IMAGE_RENDERED, {
+        canvasImgData,
+        calculatedWidth,
+        calculatedHeight,
+    });
 
-//         canvasElem.width = calculatedWidth;
-//         canvasElem.height = calculatedHeight;
+    uploadedImg.removeEventListener('load', handleImgOnload);
+}
 
-//         ctx.drawImage(uploadedImg, 0, 0, calculatedWidth, calculatedHeight);
+function handleOnChange() {
+    const fileList = this.files;
 
-//         const canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
+    if (!fileList) {
+        return;
+    }
 
-//         // TODO simplify onImageRendered
-//         emitter.publish(supportedEvents.IMAGE_RENDERED, {
-//             canvasImgData,
-//             calculatedWidth,
-//             calculatedHeight,
-//         });
+    const fileToUpload = fileList[0];
 
-//         uploadedImg.removeEventListener('load', handleFileUpload);
-//     }
+    // controller handles the upload
+    uploadController.handleFileUpload(fileToUpload)
+        // render image
+        .then((fileSrc) => {
+            uploadedImg = new Image();
 
-//     fileReader.addEventListener('load', handleReaderOnload);
-//     uploadedImg.addEventListener('load', handleImgOnload);
-
-//     fileReader.readAsDataURL(fileToUpload);
-// }
+            uploadedImg.addEventListener('load', handleImgOnload);
+            uploadedImg.src = fileSrc;
+        });
+}
 
 /**
  * Initialized the file upload view.
@@ -82,50 +83,8 @@ export function init(uploadImgSel = '#upload-img', sourceImgSel = '#source-img')
             canvasElem.width = DEFAULT_WIDTH;
             canvasElem.height = DEFAULT_HEIGHT;
 
-            // uploadImgInput.addEventListener('change', handleFileUpload);
-            uploadImgInput.addEventListener('change', () => {
-                const fileList = this.files;
+            uploadImgInput.addEventListener('change', handleOnChange);
 
-                if (!fileList) {
-                    return;
-                }
-
-                const fileToUpload = fileList[0];
-
-                // controller handles the upload
-                uploadController.handleFileUpload(fileToUpload)
-                    // render image
-                    .then((fileSrc) => {
-                        const uploadedImg = new Image();
-
-                        function handleImgOnload() {
-                            // we need caclulated values here to avoid scaling images up
-                            const calculatedWidth = (uploadedImg.width < DEFAULT_WIDTH ?
-                                uploadedImg.width : DEFAULT_WIDTH);
-                            const calculatedHeight = (uploadedImg.height / (uploadedImg.width > DEFAULT_WIDTH ?
-                                uploadedImg.width / DEFAULT_WIDTH : 1));
-
-                            canvasElem.width = calculatedWidth;
-                            canvasElem.height = calculatedHeight;
-
-                            ctx.drawImage(uploadedImg, 0, 0, calculatedWidth, calculatedHeight);
-
-                            const canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
-
-                            // TODO simplify onImageRendered
-                            emitter.publish(supportedEvents.IMAGE_RENDERED, {
-                                canvasImgData,
-                                calculatedWidth,
-                                calculatedHeight,
-                            });
-
-                            uploadedImg.removeEventListener('load', handleImgOnload);
-                        }
-
-                        uploadedImg.addEventListener('load', handleImgOnload);
-                        uploadedImg.src = fileSrc;
-                    });
-            });
             resolve();
         } catch (err) {
             reject(err);
