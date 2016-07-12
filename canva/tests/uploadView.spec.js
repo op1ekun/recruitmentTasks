@@ -19,11 +19,13 @@ describe('uploadView', () => {
 
     afterEach((done) => {
         bodyElem.innerHTML = '';
+        uploadView.eventHandlers.onImageRendered = null;
         done();
     });
 
-    it('implements event emitter .on() method', () => {
-        expect(uploadView.on).to.be.a('function');
+    it('exposes event handlers object', () => {
+        expect(uploadView.eventHandlers).to.be.an('object');
+        expect(uploadView.eventHandlers.onImageRendered).to.be.null; // eslint-disable-line no-unused-expressions
     });
 
     describe('.init()', () => {

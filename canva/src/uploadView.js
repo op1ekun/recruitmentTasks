@@ -1,40 +1,44 @@
-import { DEFAULT_WIDTH, DEFAULT_HEIGHT, supportedEvents } from './constants.js';
-import PubSub from './pubsub.js';
+import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from './constants.js';
 
 // TODO pass controller to the constructor
 import * as uploadController from './uploadController.js';
 
-const emitter = new PubSub();
-
-let uploadImgInput;
 let canvasElem;
 let ctx;
-let uploadedImg;
 
-// TODO change to promises to avoid callback hell?
-// or variables at te top of the scope
-function handleImgOnload() {
-    // we need caclulated values here to avoid scaling images up
-    const calculatedWidth = (uploadedImg.width < DEFAULT_WIDTH ?
-        uploadedImg.width : DEFAULT_WIDTH);
-    const calculatedHeight = (uploadedImg.height / (uploadedImg.width > DEFAULT_WIDTH ?
-        uploadedImg.width / DEFAULT_WIDTH : 1));
+export const eventHandlers = {
+    onImageRendered: null,
+};
 
-    canvasElem.width = calculatedWidth;
-    canvasElem.height = calculatedHeight;
+function renderImage(fileSrc) {
+    const uploadedImg = new Image();
 
-    ctx.drawImage(uploadedImg, 0, 0, calculatedWidth, calculatedHeight);
+    return new Promise((resolve, reject) => {
 
-    const canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
+        uploadedImg.addEventListener('load', () => {
+            // we need caclulated values here to avoid scaling images up
+            const calculatedWidth = (uploadedImg.width < DEFAULT_WIDTH ?
+                uploadedImg.width : DEFAULT_WIDTH);
+            const calculatedHeight = (uploadedImg.height / (uploadedImg.width > DEFAULT_WIDTH ?
+                uploadedImg.width / DEFAULT_WIDTH : 1));
 
-    // TODO simplify onImageRendered
-    emitter.publish(supportedEvents.IMAGE_RENDERED, {
-        canvasImgData,
-        calculatedWidth,
-        calculatedHeight,
+            canvasElem.width = calculatedWidth;
+            canvasElem.height = calculatedHeight;
+
+            ctx.drawImage(uploadedImg, 0, 0, calculatedWidth, calculatedHeight);
+
+            const canvasImgData = ctx.getImageData(0, 0, calculatedWidth, calculatedHeight);
+
+            resolve({
+                canvasImgData,
+                calculatedWidth,
+                calculatedHeight,
+            });
+        });
+
+        uploadedImg.addEventListener('error', reject);
+        uploadedImg.src = fileSrc;
     });
-
-    uploadedImg.removeEventListener('load', handleImgOnload);
 }
 
 function handleOnChange() {
@@ -48,12 +52,11 @@ function handleOnChange() {
 
     // controller handles the upload
     uploadController.handleFileUpload(fileToUpload)
-        // render image
-        .then((fileSrc) => {
-            uploadedImg = new Image();
-
-            uploadedImg.addEventListener('load', handleImgOnload);
-            uploadedImg.src = fileSrc;
+        // view handles rendering the image
+        .then((fileSrc) => renderImage(fileSrc))
+        // and notifying whoever is listenting when ready
+        .then((imageData) => {
+            eventHandlers.onImageRendered(imageData);
         });
 }
 
@@ -74,7 +77,7 @@ export function init(uploadImgSel = '#upload-img', sourceImgSel = '#source-img')
     // than strict separate behaviour for both sync and async.
     return new Promise((resolve, reject) => {
         try {
-            uploadImgInput = document.querySelector(uploadImgSel);
+            const uploadImgInput = document.querySelector(uploadImgSel);
             canvasElem = document.querySelector(sourceImgSel);
             ctx = canvasElem.getContext('2d');
 
@@ -90,8 +93,4 @@ export function init(uploadImgSel = '#upload-img', sourceImgSel = '#source-img')
             reject(err);
         }
     });
-}
-
-export function on(...args) {
-    emitter.subscribe(...args);
 }
