@@ -1,11 +1,14 @@
-import * as uploadView from './uploadView.js';
+import UploadView from './uploadView.js';
 import * as mosaicView from './mosaicView.js';
 
-uploadView.init()
-    .then(mosaicView.init)
+import * as uploadController from './uploadController.js';
+
+const uploadView = new UploadView(uploadController);
+// const mosaicView = new MosicaView(mosaicController);
+
+mosaicView.init()
     .then(() => {
-        // process uploaded images
-        uploadView.eventHandlers.onImageRendered = (renderedImageData) => {
+        uploadView.onImageRendered = (renderedImageData) => {
 
             mosaicView.render(renderedImageData)
                 .then(() => {
