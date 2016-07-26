@@ -4,9 +4,7 @@ export function handleFileUpload(file) {
         if (!file) {
             reject(new TypeError('file is undefined'));
             return;
-        }
-
-        if (!(file instanceof File)) {
+        } else if (!(file instanceof File)) {
             reject(new TypeError('file is not an instance of File'));
             return;
         }

@@ -21,10 +21,12 @@ export default class UploadView {
         this.onImageRendered = null;
 
         /**
-         * [description]
+         * Renders an uploaded image using provided image source.
+         * Based on the image dimensions it adjusts the canvas size.
+         * Finally it resolves with bespoke image data object.
          *
-         * @param   {[type]} fileSrc [description]
-         * @returns {[type]}         [description]
+         * @param   {string} fileSrc    the source of an imgae file
+         * @returns {Promise}           resolves with bespoke image data object
          */
         const renderImage = (fileSrc) => {
             const uploadedImg = new Image();
@@ -58,9 +60,11 @@ export default class UploadView {
         };
 
         /**
-         * [description]
+         * Handles the event after users selects a file to upload using the file input element.
+         * Retrieves a file from the file input element,
+         * and passes it to the controller to get the source for to the image.
          *
-         * @returns {[type]} [description]
+         * @returns {undefined}
          */
         const handleOnChange = () => {
             const fileList = uploadImgInput.files;
@@ -77,7 +81,10 @@ export default class UploadView {
                 .then((fileSrc) => renderImage(fileSrc))
                 // and notifying whoever is listenting when ready
                 .then((imageData) => {
-                    this.onImageRendered(imageData);
+                    if (this.onImageRendered instanceof Function) {
+                        // pass the data to the provided handler
+                        this.onImageRendered(imageData);
+                    }
                 });
         };
 

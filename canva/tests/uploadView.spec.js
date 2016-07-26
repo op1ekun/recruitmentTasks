@@ -2,7 +2,7 @@
 import UploadView from '../src/uploadView.js';
 const expect = chai.expect;
 
-describe('uploadView', () => {
+describe('UploadView class', () => {
     const bodyElem = document.querySelector('body');
 
     beforeEach((done) => {
@@ -22,25 +22,27 @@ describe('uploadView', () => {
         done();
     });
 
-    it('throws a ReferenceError if controller is not provided', () => {
+    it('throws a ReferenceError if controller is not provided', (done) => {
         try {
             const uploadView = new UploadView(); // eslint-disable-line no-unused-vars
         } catch (err) {
             expect(err).to.be.instanceof(ReferenceError);
             expect(err.message).to.be.equal('controller is undefined');
+            done();
         }
     });
 
-    it('throws a TypeError if controller is not an object', () => {
+    it('throws a TypeError if controller is not an object', (done) => {
         try {
             const uploadView = new UploadView('not an object'); // eslint-disable-line no-unused-vars
         } catch (err) {
             expect(err).to.be.instanceof(TypeError);
             expect(err.message).to.be.equal('controller is not an object');
+            done();
         }
     });
 
-    it('creates and instance of a view if controller object is passed, a default source, and mosaic elements exist', (done) => {
+    it('creates and instance of a view if controller object is passed, a default source input, and source image elements exist', (done) => {
         try {
             const uploadView = new UploadView({});
             expect(uploadView).to.be.instanceof(UploadView);
@@ -70,8 +72,12 @@ describe('uploadView', () => {
         }
     });
 
-    it('exposes inImageRendered event handler', () => {
-        const uploadView = new UploadView({});
-        expect(uploadView.onImageRendered).to.be.null; // eslint-disable-line no-unused-expressions
+    describe('uploadView instance', () => {
+
+        it('exposes inImageRendered event handler', () => {
+            const uploadView = new UploadView({});
+            expect(uploadView.onImageRendered).to.be.null; // eslint-disable-line no-unused-expressions
+        });
     });
+
 });

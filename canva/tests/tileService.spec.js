@@ -35,8 +35,8 @@ describe('tileService', () => {
         it('rejects Promise with TypeError if no color passed', (done) => {
             tileService.getTile()
                 .catch((err) => {
-                    expect(err).to.be.instanceof(TypeError);
-                    expect(err.message).to.be.equal('passed value is not a hexadecimal color');
+                    expect(err).to.be.instanceof(ReferenceError);
+                    expect(err.message).to.be.equal('hexColor is undefined');
                     done();
                 });
         });
@@ -45,7 +45,7 @@ describe('tileService', () => {
             tileService.getTile('notAColor')
                 .catch((err) => {
                     expect(err).to.be.instanceof(TypeError);
-                    expect(err.message).to.be.equal('passed value is not a hexadecimal color');
+                    expect(err.message).to.be.equal('hexColor is not a hexadecimal color');
                     done();
                 });
         });
