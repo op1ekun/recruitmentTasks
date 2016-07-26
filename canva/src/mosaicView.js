@@ -15,27 +15,23 @@ export default class MosaicView {
             throw new TypeError('tileService is not an object');
         }
 
-        try {
-            const mosaicElem = document.querySelector(mosaicSelector);
+        const mosaicElem = document.querySelector(mosaicSelector);
 
-            // private, readonly properties
-            Object.defineProperty(this, '_tileService', {
-                get: () => tileService,
-                configurable: false,
-                enumerable: false,
-            });
+        // private, readonly properties
+        Object.defineProperty(this, '_tileService', {
+            get: () => tileService,
+            configurable: false,
+            enumerable: false,
+        });
 
-            Object.defineProperty(this, '_mosaicElem', {
-                get: () => mosaicElem,
-                configurable: false,
-                enumerable: false,
-            });
+        Object.defineProperty(this, '_mosaicElem', {
+            get: () => mosaicElem,
+            configurable: false,
+            enumerable: false,
+        });
 
-            this._mosaicElem.style.width = `${DEFAULT_WIDTH}px`;
-            this._mosaicElem.style.height = `${DEFAULT_HEIGHT}px`;
-        } catch (err) {
-            throw err;
-        }
+        this._mosaicElem.style.width = `${DEFAULT_WIDTH}px`;
+        this._mosaicElem.style.height = `${DEFAULT_HEIGHT}px`;
     }
 
     // util methods
