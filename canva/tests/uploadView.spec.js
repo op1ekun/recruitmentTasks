@@ -1,8 +1,8 @@
 /* global chai */
-import * as uploadView from '../src/uploadView.js';
+import UploadView from '../src/uploadView.js';
 const expect = chai.expect;
 
-describe('uploadView', () => {
+describe('UploadView class', () => {
     const bodyElem = document.querySelector('body');
 
     beforeEach((done) => {
@@ -22,32 +22,62 @@ describe('uploadView', () => {
         done();
     });
 
-    it('implements .init() method', () => {
-        expect(uploadView.init).to.be.a('function');
-        expect(uploadView.init().then).to.be.a('function');
+    it('throws a ReferenceError if controller is not provided', (done) => {
+        try {
+            const uploadView = new UploadView(); // eslint-disable-line no-unused-vars
+        } catch (err) {
+            expect(err).to.be.instanceof(ReferenceError);
+            expect(err.message).to.be.equal('controller is undefined');
+            done();
+        }
     });
 
-    it('implements event emitter .on() method', () => {
-        expect(uploadView.on).to.be.a('function');
+    it('throws a TypeError if controller is not an object', (done) => {
+        try {
+            const uploadView = new UploadView('not an object'); // eslint-disable-line no-unused-vars
+        } catch (err) {
+            expect(err).to.be.instanceof(TypeError);
+            expect(err.message).to.be.equal('controller is not an object');
+            done();
+        }
     });
 
-    describe('.init()', () => {
+    it('creates and instance of a view if controller object is passed, a default source input, and source image elements exist', (done) => {
+        try {
+            const uploadView = new UploadView({});
+            expect(uploadView).to.be.instanceof(UploadView);
+            done();
+        } catch (err) {
+            done(err);
+        }
+    });
 
-        it('resolves Promise if inititialization is successful', (done) => {
-            uploadView.init()
-                .then(() => {
-                    done();
-                });
+    it('creates an instance of a view if selectors for existing elements are provided', (done) => {
+        try {
+            const uploadView = new UploadView({}, '#upload-img', '#source-img');
+            expect(uploadView).to.be.instanceof(UploadView);
+            done();
+        } catch (err) {
+            done(err);
+        }
+    });
+
+    it('creates an instance only if the first selector is provided, and the', (done) => {
+        try {
+            const uploadView = new UploadView({}, '#upload-img');
+            expect(uploadView).to.be.instanceof(UploadView);
+            done();
+        } catch (err) {
+            done(err);
+        }
+    });
+
+    describe('uploadView instance', () => {
+
+        it('exposes inImageRendered event handler', () => {
+            const uploadView = new UploadView({});
+            expect(uploadView.onImageRendered).to.be.null; // eslint-disable-line no-unused-expressions
         });
-
-        it('rejects Promise if inititialization fails', (done) => {
-            bodyElem.innerHTML = '';
-
-            uploadView.init()
-                .catch((err) => {
-                    expect(err).to.be.instanceof(TypeError);
-                    done();
-                });
-        });
     });
+
 });

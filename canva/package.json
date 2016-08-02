@@ -1,7 +1,7 @@
 {
   "author": "Canva",
   "name": "mosaic",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "scripts": {
     "start": "node server.js",
     "test": "karma start ./karma.conf.js",
@@ -21,6 +21,7 @@
     "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
     "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
     "karma-mocha": "^1.0.1",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-spec-reporter": "0.0.26",

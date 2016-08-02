@@ -8,6 +8,12 @@ module.exports = function karmaConfig(config) {
             'mocha',
         ],
 
+        // client: {
+        //     mocha: {
+        //         timeout: 5000,
+        //     },
+        // },
+
         colors: true,
         logLevel: config.LOG_ERROR, // LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
         autoWatch: true,
@@ -15,6 +21,7 @@ module.exports = function karmaConfig(config) {
 
         browsers: [
             'PhantomJS',
+            'Chrome',
         ],
 
         reporters: [
@@ -80,6 +87,7 @@ module.exports = function karmaConfig(config) {
 
         plugins: [
             'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
             'karma-mocha',
             'karma-webpack',
             'karma-spec-reporter',

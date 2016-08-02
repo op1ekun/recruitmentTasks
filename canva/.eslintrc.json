@@ -13,6 +13,7 @@
   "rules": {
     "indent": [2, 4],
     "padded-blocks": 0,
-    "max-len": [0, 80, 4]
+    "max-len": [0, 80, 4],
+    "no-underscore-dangle": "off"
   }
 }

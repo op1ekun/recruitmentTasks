@@ -1,8 +1,8 @@
 /* global chai */
-import * as mosaicView from '../src/mosaicView.js';
+import MosaicView from '../src/mosaicView.js';
 const expect = chai.expect;
 
-describe('mosaicView', () => {
+describe('MosaicView class', () => {
     const bodyElem = document.querySelector('body');
 
     beforeEach((done) => {
@@ -22,39 +22,51 @@ describe('mosaicView', () => {
         done();
     });
 
-    it('implements .init() method', () => {
-        expect(mosaicView.init).to.be.a('function');
-        expect(mosaicView.init().then).to.be.a('function');
+    it('exposes static util methods', () => {
+        expect(MosaicView.rgbToHex).to.be.instanceof(Function);
+        expect(MosaicView.avgColor).to.be.instanceof(Function);
     });
 
-    it('implements .render() method', () => {
-        expect(mosaicView.render).to.be.a('function');
-        expect(mosaicView.render({
-            canvasImgData: {
-                data: [],
-            },
-            calculatedWidth: 0,
-            calculatedHeight: 0,
-        }).then).to.be.a('function');
+    it('throws a ReferenceError if tile service is not provided', (done) => {
+        try {
+            const mosaicView = new MosaicView(); // eslint-disable-line no-unused-vars
+        } catch (err) {
+            expect(err).to.be.instanceof(ReferenceError);
+            expect(err.message).to.be.equal('tileService is undefined');
+            done();
+        }
     });
 
-    describe('.init()', () => {
+    it('throws a TypeError if tile service is not an object', (done) => {
+        try {
+            const mosaicView = new MosaicView('not an object'); // eslint-disable-line no-unused-vars
+        } catch (err) {
+            expect(err).to.be.instanceof(TypeError);
+            expect(err.message).to.be.equal('tileService is not an object');
+            done();
+        }
+    });
 
-        it('resolves Promise if inititialization is successful', (done) => {
-            mosaicView.init()
-                .then(() => {
-                    done();
-                });
-        });
+    it('creates and instance of a view if tile service object is passed, and a default mosaic element exists', (done) => {
+        try {
+            const mosaicView = new MosaicView({});
+            expect(mosaicView).to.be.instanceof(MosaicView);
+            done();
+        } catch (err) {
+            done(err);
+        }
+    });
 
-        it('rejects Promise if inititialization fails', (done) => {
-            bodyElem.innerHTML = '';
+    describe('mosaicView instance', () => {
 
-            mosaicView.init()
-                .catch((err) => {
-                    expect(err).to.be.instanceof(TypeError);
-                    done();
-                });
+        it('exposes public render method', (done) => {
+            try {
+                const mosaicView = new MosaicView({});
+                expect(mosaicView.render).to.be.instanceof(Function);
+                done();
+            } catch (err) {
+                done(err);
+            }
         });
     });
 });
