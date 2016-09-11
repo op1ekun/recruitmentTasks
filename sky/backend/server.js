@@ -1,14 +1,21 @@
 'use strict';
 
-var express     = require('express'),
-    fs          = require('fs'),
-    app         = express(),
-    server      = require('http').createServer(app),
-    urlPaths    = ['/register', '/thanks'];
+var express = require('express');
+var fs = require('fs');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var app = express();
+var server = require('http').createServer(app);
+var urlPaths = ['/register', '/thanks'];
 
-app.use(express.bodyParser());
-app.use(express.cookieParser());
-app.use(express.session({ secret: "ch0pSuey" }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    secret: "ch0pSuey",
+    resave: true,
+    saveUninitialized: true    
+}));
 
 app.get('/', function (req, res) {
     res.redirect(urlPaths[0]);
@@ -26,7 +33,9 @@ app.post('/rest/register', function (req, res) {
     }
 });
 
-app.use(express.static(__dirname + '/../frontend'));
+// map static resources
+app.use(express.static(__dirname + '../../node_modules/'));
+app.use(express.static(__dirname + '../../frontend/'));
 
 var port = process.env.PORT || 3000;
 server.listen(port, function() {

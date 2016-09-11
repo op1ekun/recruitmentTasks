@@ -11,8 +11,8 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
     // Now set up the states
     $stateProvider
         .state('register', {
-            url: "/register",
-            templateUrl: "src/app/register/register.html",
+            url: '/register',
+            templateUrl: 'src/app/register/register.html',
             controller: 'RegisterCtrl'
         })
 });

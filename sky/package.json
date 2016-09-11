@@ -3,17 +3,21 @@
   "author": "NOWTV",
   "version": "0.0.1",
   "dependencies": {
-    "angular": "^1.5.5",
-    "angular-ui-router": "^0.3.0",
-    "express": "~3.0.0",
-    "jquery": "^2.2.3"
+    "angular": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.1"
   },
   "devDependencies": {
-    "angular-mocks": "^1.5.5",
-    "karma": "~0.12.3",
-    "karma-chrome-launcher": "~0.1.3",
-    "karma-jasmine": "~0.1.5",
-    "supervisor": "~0.5.7"
+    "angular-mocks": "^1.5.8",
+    "jasmine": "^2.5.1",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "supervisor": "^0.11.0"
   },
   "scripts": {
     "start": "supervisor --no-restart-on=error backend/server.js",
