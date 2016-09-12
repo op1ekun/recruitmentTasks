@@ -66,6 +66,7 @@ export default class MosaicView {
         // vertical tiles
         const yTilesCount = Math.floor(canvasImgData.height / TILE_HEIGHT);
         const rowsData = [];
+        let rowsTmpl = '';
 
         let dataStart = 0;
         let dataEnd = canvasImgData.width * 4 * TILE_WIDTH;
@@ -142,6 +143,8 @@ export default class MosaicView {
 
         // loop thru every row
         for (let y = 0; y < yTilesCount; y++) {
+            rowsTmpl += '<p class="clearfix"></p>';
+
             rowsData.push({
                 dataStart,
                 dataEnd,
@@ -152,6 +155,10 @@ export default class MosaicView {
             dataEnd = dataStart + canvasImgData.width * 4 * TILE_WIDTH;
         }
 
+        // initialize an empty mozaik
+        this._mosaicElem.innerHTML = rowsTmpl;
+        const emptyRowElems = this._mosaicElem.querySelectorAll('p');
+
         // the previous version was (pardon my french) a brainfart,
         // left after I was testing out different options to render rows
         return rowsData.reduce((promise, rowData, index) =>
@@ -160,7 +167,10 @@ export default class MosaicView {
                     pixelData.slice(rowData.dataStart, rowData.dataEnd),
                     canvasImgData.width)
                 .then((rowTmpl) => {
-                    this._mosaicElem.innerHTML += rowTmpl;
+                    // add tiles
+                    emptyRowElems[index].innerHTML = rowTmpl;
+                    // make row visible
+                    emptyRowElems[index].style.display = 'block';
                 })
         ), Promise.resolve());
     }
