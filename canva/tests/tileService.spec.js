@@ -1,29 +1,20 @@
-/* global window */
-/* global TILE_WIDTH */
 /* global chai */
+import { TILE_WIDTH } from '../src/constants.js';
 import * as tileService from '../src/tileService.js';
-import fetchStub, { SVG_TMPL } from './stubs/fetchStub.js';
 
 const expect = chai.expect;
 
 describe('tileService', () => {
     const hexColor = 'ff6600';
-    const origFetch = window.fetch;
 
-    beforeEach((done) => {
-        window.fetch = fetchStub;
-        done();
-    });
-
-    afterEach((done) => {
-        window.fetch = origFetch;
-        done();
+    it('exports svg template', () => {
+        expect(tileService.SVG_TMPL).to.be.a('string');
     });
 
     describe('.getTile()', () => {
 
         it('resolves Promise with <svg> template string if hexadeciaml color value is passed', (done) => {
-            const processedTemplate = SVG_TMPL.replace('%s', hexColor).replace('%d', TILE_WIDTH);
+            const processedTemplate = tileService.SVG_TMPL.replace('%s', hexColor).replace(/%d/g, TILE_WIDTH);
 
             tileService.getTile(hexColor)
                 .then((svgTile) => {
