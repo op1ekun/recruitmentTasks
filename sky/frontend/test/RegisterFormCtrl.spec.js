@@ -59,5 +59,12 @@ describe('RegisterForm Ctrl', function () {
                     email: EMAIL
                 })
         });
+
+        it('raises errors if the colour, the email or both are not set', function() {
+            rfc.registerUser();
+
+            expect(rfc.errors.colour).toBeTruthy();
+            expect(rfc.errors.email).toBeTruthy();
+        });
     });
 });

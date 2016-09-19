@@ -1,0 +1,95 @@
+html, body {
+    height: 100%;
+}
+
+html, body, h1, h2, ul, li {
+    margin: 0;
+    padding: 0;
+
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    font-size: 100%;
+}
+
+.mainView {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.mainView .registerForm {
+    width: 100%;
+}
+
+.mainView h1 {
+    font-size: 1.75em;
+    width: 100%;
+}
+
+.registerForm > input[type=submit] {
+    margin: 0 auto;
+    padding: 0.25em 0.75em;
+    display: block;
+    font-size: 1.25em;
+}
+
+.fieldContainer {
+    position: relative;
+    padding: 1em 2em 2.5em 2em;
+    height: 4em;
+    font-size: 0.75em;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.fieldContainer > h2 {
+    padding-bottom: 1em;
+}
+
+.fieldContainer .error {
+    position: absolute;
+    bottom: 0.5em;
+    left: 0;
+    width: 100%;
+
+    font-weight: bold;
+    color: #f00;
+
+    display: block;
+}
+
+.colourPicker {
+    margin: 0 0.5em;
+    border: 2px solid #000;
+    height: 2em;
+    width: 2em;
+    display: inline-block;
+}
+
+.colourPicker.selected {
+    border: 2px solid #f00;
+}
+
+.colourPicker.black {
+    background-color: #000;
+}
+
+.colourPicker.yellow {
+    background-color: #fe0;
+}
+
+.colourPicker.orange {
+    background-color: #f60;
+}
+
+.colourPicker.blue {
+    background-color: #00f;
+}
+
+.colourPicker.green {
+    background-color: #0f0;
+}
+
+.colourPicker > input {
+    display: none;
+}
