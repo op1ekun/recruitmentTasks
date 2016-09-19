@@ -1,4 +1,13 @@
-describe('registerSerivce', function() {
+/* global describe */
+/* global module */
+/* global beforeEach */
+/* global afterEach */
+/* global inject */
+/* global it */
+/* global expect */
+describe('registerService', function() {
+    'use strict';
+
     var httpBackend;
     var registerSerivce;
     var successResponse = {
@@ -6,16 +15,13 @@ describe('registerSerivce', function() {
     };
 
     beforeEach(function(done) {
-        module('app');
+        module('registerService');
 
         inject(function(_$httpBackend_, _registerService_) {
             httpBackend = _$httpBackend_;
             registerSerivce = _registerService_;
 
-            httpBackend.when('GET', 'src/app/register/register.html')
-                .respond('');
-
-            httpBackend.when('POST', '/rest/register')
+            httpBackend.whenPOST('/rest/register')
                 .respond(successResponse);
 
             done();

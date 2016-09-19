@@ -1,2 +1,0 @@
-app.controller('ThanksCtrl', [function() {
-}]);

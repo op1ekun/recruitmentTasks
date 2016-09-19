@@ -14,20 +14,42 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'node_modules/jquery/dist/jquery.js',
-        'node_modules/angular/angular.js',
-        'node_modules/angular-ui-router/release/angular-ui-router.js',
+        'node_modules/angular/angular.min.js',
+        'node_modules/angular-ui-router/release/angular-ui-router.min.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'frontend/src/common/app.js',
+        'frontend/src/**/*.tmpl',
         'frontend/src/**/*.js',
         'frontend/test/**/*.js'
     ],
 
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+        'frontend/src/**/*.js': [ 'coverage' ],
+        'frontend/src/**/*.tmpl': [ 'ng-html2js' ],
+    },
+
+    coverageReporter: {
+        reporters: [
+            {
+                type: 'text-summary'
+            },
+            {
+                type: 'html'
+            }
+        ]
+    },
+
+    ngHtml2JsPreprocessor: {
+        stripPrefix: 'frontend/',
+        moduleName: 'partials' 
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['spec', 'coverage'],
 
 
     // web server port
@@ -46,10 +68,21 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
+    plugins: [
+        'karma-chrome-launcher',
+        'karma-phantomjs-launcher',
+        'karma-spec-reporter',
+        'karma-jasmine',
+        'karma-coverage',
+        'karma-ng-html2js-preprocessor'
+    ],
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: [
+        'Chrome',
+        // 'PhantomJS'
+    ],
 
 
     // Continuous Integration mode
