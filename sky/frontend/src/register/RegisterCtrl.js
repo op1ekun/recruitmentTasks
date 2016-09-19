@@ -1,8 +1,26 @@
 angular.module('RegisterCtrl', [
 ])
-.controller('RegisterCtrl', ['$scope', function ($scope) {
+.controller('RegisterCtrl', [ function () {
     'use strict';
+    var rc = this;
 
-    $scope.hello = 'world';
+    rc.hello = 'world';
+    rc.colours = [
+        {
+            name: 'black'
+        },
+        {
+            name: 'yellow'
+        },
+        {
+            name: 'orange'
+        },
+        {
+            name: 'green'
+        },
+        {
+            name: 'blue'
+        }
+    ];
 
 }]);

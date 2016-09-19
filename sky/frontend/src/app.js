@@ -18,13 +18,15 @@ angular.module('app', [
         .state('register', {
             url: '/register',
             templateUrl: 'src/register/register.tmpl',
-            controller: 'RegisterCtrl'
+            controller: 'RegisterCtrl',
+            controllerAs: 'rc'
         });
 
     $stateProvider
         .state('thanks', {
             url: '/thanks',
             templateUrl: 'src/thanks/thanks.tmpl',
-            controller: 'ThanksCtrl'
+            controller: 'ThanksCtrl',
+            controllerAs: 'tc'
         });
 });

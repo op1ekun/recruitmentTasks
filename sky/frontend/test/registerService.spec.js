@@ -5,7 +5,7 @@
 /* global inject */
 /* global it */
 /* global expect */
-describe('registerService', function() {
+describe('Register Service', function() {
     'use strict';
 
     var httpBackend;

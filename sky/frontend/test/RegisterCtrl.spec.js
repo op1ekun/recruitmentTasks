@@ -9,12 +9,32 @@ describe('Register Ctrl', function () {
 
     beforeEach(module('RegisterCtrl'));
 
-    it('sets hello placeholder on scope', inject(function ($rootScope, $controller) {
-        var scope = $rootScope.$new();
+    it('sets hello placeholder in the controller', inject(function ($controller) {
+        var rc = $controller('RegisterCtrl');
 
-        $controller('RegisterCtrl', {$scope: scope});
+        expect(rc.hello).toEqual('world');
+    }));
 
-        expect(scope.hello).toEqual('world');
+    it('sets colours config in the controller', inject(function ($controller) {
+        var rc = $controller('RegisterCtrl');
+
+        expect(rc.colours).toEqual([
+            {
+                name: 'black'
+            },
+            {
+                name: 'yellow'
+            },
+            {
+                name: 'orange'
+            },
+            {
+                name: 'green'
+            },
+            {
+                name: 'blue'
+            }
+        ]);
     }));
 
 });
