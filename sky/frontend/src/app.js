@@ -1,8 +1,8 @@
 angular.module('app', [
+    // all dependencies require by the app are loaded here
     'ui.router',
     'registerModule',
-    'thanksModule',
-    'formElementModule'
+    'thanksModule'
 ])
 .config(function($locationProvider, $stateProvider, $urlRouterProvider) {
     'use strict';

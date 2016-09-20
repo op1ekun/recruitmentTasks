@@ -29,8 +29,7 @@ describe('Register Service', function() {
     });
 
     afterEach(function() {
-        // httpBackend.verifyNoOutstandingExpectation();
-        // httpBackend.verifyNoOutstandingRequest();
+        httpBackend.verifyNoOutstandingRequest();
     });
 
     it('send a valid request', function(done) {

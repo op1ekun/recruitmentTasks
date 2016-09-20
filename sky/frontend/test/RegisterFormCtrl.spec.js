@@ -32,23 +32,30 @@ describe('RegisterForm Ctrl', function () {
         rfc = _$controller_('RegisterFormCtrl', { 'registerService': mockService });
     }));
 
+    it('sets default values', function() {
+        expect(rfc.selectedColour).toBeNull();
+        expect(rfc.email).toEqual('');
+        expect(rfc.errors.colour).toEqual(false);
+        expect(rfc.errors.email).toEqual(false);
+    });
+
     describe('selectColor()', function() {
 
         it('sets selectedColour property in the controller',  function() {
-            rfc.selectColour(COLOUR)
-            expect(rfc.selectedColour).toEqual(COLOUR);
+            rfc.selectColour({
+                name: COLOUR
+            })
+            expect(rfc.selectedColour.name).toEqual(COLOUR);
         }); 
     });
 
     describe('registerUser()', function() {
 
-        // a smoke test to set interface expectation
-        it('returns a $q promise', function() {
-            expect(rfc.registerUser() instanceof q).toBeTruthy();
-        });
-
         it('calls registerService.registerUser() method with colour, and email data', function() {
-            rfc.selectedColour = COLOUR;
+            rfc.selectedColour = {
+                name: COLOUR
+            };
+            
             rfc.email = EMAIL;
 
             rfc.registerUser();
