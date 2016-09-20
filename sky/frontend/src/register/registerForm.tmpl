@@ -1,0 +1,18 @@
+<form class="registerForm" ng-submit="rfc.registerUser()">
+    <ng-transclude></ng-transclude>
+    <section class="fieldContainer">    
+        <h2>1. Please enter your favourite colour</h2>
+        <label class="colourPicker {{colour.name}}" ng-repeat="colour in rfc.colours" ng-class="{selected: colour.selected}">
+            <input type="radio" name="colourPicker"
+                ng-value="colour.name"
+                ng-class="colour.selected"
+                ng-click="rfc.selectColour(colour)">
+        </label>
+    </section>
+    <section class="fieldContainer">
+        <h2>2. Enter your email address</h2>
+        <input type="text" name="email" ng-model="rfc.email">
+        <span class="error" ng-show="rfc.errors.email">Please type in a valid email address.</span>
+    </section>
+    <input type="submit" value="Register!"">
+</form>

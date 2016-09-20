@@ -1,0 +1,6 @@
+.idea
+node_modules
+nowtv-applicant-remote-exercise-master.iml
+*.iml
+npm-debug.log
+coverage

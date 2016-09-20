@@ -1,0 +1,29 @@
+{
+  "name": "nowtv-applicant-remote-exercise",
+  "author": "NOWTV",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.8",
+    "jasmine": "^2.5.1",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-ng-html2js-preprocessor": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-spec-reporter": "0.0.26",
+    "supervisor": "^0.11.0"
+  },
+  "scripts": {
+    "start": "supervisor --no-restart-on=error backend/server.js",
+    "test": "karma start frontend/build/tests/unit/karma.conf.js --debug"
+  }
+}
