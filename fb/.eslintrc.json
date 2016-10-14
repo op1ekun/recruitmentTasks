@@ -1,0 +1,19 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jasmine": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "extends": "airbnb/base",
+  "rules": {
+    "indent": [2, 4],
+    "padded-blocks": 0,
+    "max-len": [0, 80, 4],
+    "no-underscore-dangle": "off"
+  }
+}
