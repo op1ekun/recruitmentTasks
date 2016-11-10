@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <script>
+
+            const valuesList = [4, 13, 1, 42, 5, 111, 33, 3, 31, 6, 17];
+
+            /**
+             * Nodes are in from of:
+             * {
+             *     value: 123,
+             *     left: null,
+             *     right: null,
+             * }
+             *
+             * Where left, and right hold the references to node's branches
+             */
+            class BinaryTree {
+
+                constructor(rootValue) {
+                    this.root = {
+                        value: rootValue,
+                    };
+                }
+
+                /**
+                 * Add a new value to the tree.
+                 *
+                 * @param {Number} newValue  the new value to be added to the tree
+                 */
+                add(newValue) {
+
+                    /**
+                     * Recursively finds the correct parent node in the tree
+                     * to add a new node element with the new given value.
+                     *
+                     * @param   {Object} parent     the current parent node
+                     * @param   {Number} value      the value to be added to the tree
+                     * @returns {Object}            the found node
+                     */
+                    function getParent(parent, value) {
+
+                        if (value < parent.value &&
+                            parent.left) {
+
+                            return getParent(parent.left, value);
+                        } else if (value > parent.value &&
+                            parent.right) {
+
+                            return getParent(parent.right, value);
+                        }
+
+                        return parent;
+                    }
+
+                    // always start with a root
+                    const currentParent = getParent(this.root, newValue);
+                    const newNode = {
+                        value: newValue,
+                    };
+
+                    // once current parrent node is known
+                    // append the new node to either left or right branch
+                    if (newValue < currentParent.value) {
+                        currentParent.left = newNode;
+                    } else if (newValue > currentParent.value) {
+                        currentParent.right = newNode;
+                    }
+                }
+
+                /**
+                 * Recursively searches for the value in the tree.
+                 *
+                 * @param   {Number}    value   searched value
+                 * @returns {Boolean}           true when value is found
+                 *                              false when value is NOT found
+                 */
+                contains(value) {
+
+                    function findValue(parent, searchedValue) {
+                        let found = false;
+
+                        if (searchedValue === parent.value) {
+                            found = true;
+                        } else if (searchedValue < parent.value &&
+                            parent.left) {
+
+                            found = findValue(parent.left, searchedValue);
+                        } else if (searchedValue > parent.value &&
+                            parent.right) {
+
+                            found = findValue(parent.right, searchedValue);
+                        }
+
+                        return found;
+                    }
+
+                    return findValue(this.root, value);
+                }
+            }
+
+            // a bit of testing
+            const rootValue = valuesList[Math.floor(Math.random() * valuesList.length)];
+            const binaryTree = new BinaryTree(rootValue);
+            const myNum = 42;
+
+            valuesList.splice(valuesList.indexOf(rootValue), 1);
+
+            valuesList.forEach((value) => {
+                binaryTree.add(value);
+            });
+
+            console.log('contains', myNum, binaryTree.contains(myNum));
+
+            console.log(binaryTree.root);
+            console.log(JSON.stringify(binaryTree.root, 0, 4));
+
+        </script>
+    </body>
+</html>

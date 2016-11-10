@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <script src="./bstNode.js"></script>
+        <script>
+
+            // precision doesn't fix the problem with EEE754 numbers
+            // tries were introduced to suffice the set
+            // function sqrt(n, precision = 3) {
+            //     const limit = 1000;
+            //     let tries = 0;
+            //     let low = 0;
+            //     let high = n;
+
+            //     while (tries < limit && (high * Math.pow(10, precision) - low * Math.pow(10, precision)) > 1) {
+            //         const mid = (high + low) / 2;
+
+            //         if (mid * mid <= n) {
+            //             low = mid;
+            //         } else {
+            //             high = mid;
+            //         }
+
+            //         tries++;
+            //     }
+
+            //     return parseFloat(low.toFixed(precision));
+            // }
+
+            function sqrt(n) {
+                let low = 0;
+                let high = n;
+
+                // indicate that boundaires changed from the last search
+                // if at least one of the boundries changes it indicates
+                // that search is still going on
+                let lowBoundary = true;
+                let highBoundary = true;
+
+                while ((lowBoundary || highBoundary) && (high - low) > 0) {
+                    const mid = (high + low) / 2;
+                    const result = mid * mid;
+
+                    if (result === n) {
+                        return mid;
+                    } else if (mid * mid <= n) {
+                        highBoundary = false;
+
+                        if (low === mid) {
+                            lowBoundary = false;
+                        } else {
+                            lowBoundary = true;
+                        }
+
+                        low = mid;
+                    } else {
+                        lowBoundary = false;
+
+                        if (high === mid) {
+                            highBoundary = false;
+                        } else {
+                            highBoundary = true;
+                        }
+
+                        high = mid;
+                    }
+                }
+
+                return low;
+            }
+
+
+            // TODO shuffle
+            // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+            const valuesList = [4, 13, 1, 42, 7, 5, 111, 33, 3, 31, 6, 17, 11, 9, 12, 8, 122];
+            // const valuesList = [1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 17, 31, 33, 42, 111, 122];
+            // const valuesList = [20, 30, 40, 50, 90, 100];
+
+            // a bit of testing
+            const rootValue = valuesList[Math.floor(Math.random() * valuesList.length)];
+            const binaryTree = new BSTNode(rootValue);
+            const myNum = 31;
+
+            valuesList.splice(valuesList.indexOf(rootValue), 1);
+
+            valuesList.forEach((value) => {
+                binaryTree.add(value);
+            });
+
+            console.log(JSON.stringify(binaryTree, 0, 4));
+            console.log('contains', myNum, binaryTree.contains(myNum));
+            console.log('findNode', myNum, binaryTree.find(myNum));
+            
+            // binaryTree.remove(31);
+
+            // console.log(binaryTree);
+
+            // console.log(binaryTree.size());
+            // console.log(binaryTree.toArray());
+            // console.log(binaryTree.toString());
+
+            // const values = [];
+            // binaryTree.traversePostOrder((node) => {
+            //     // console.log(node.value);
+            //     values.push(node.value);
+            // });
+
+            // console.log(values.join());
+
+        </script>
+    </body>
+</html>
+
+  11
+ / 
+8
